@@ -15,7 +15,7 @@
 #include <WiFiClientSecure.h>
 
 #include <WebSocketsClient.h>
-#include "config.h"
+#include <config.h>
 
 WebSocketsClient webSocket;
 
