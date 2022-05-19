@@ -16,6 +16,9 @@
 
 #include <WebSocketsClient.h>
 #include <config.h>
+#include <ArduinoJson.h>
+#include "messages/BootNotificationRequest.h"
+#include "enums/BootReasonEnumType.h"
 
 WebSocketsClient webSocket;
 
@@ -75,7 +78,7 @@ void webSocketEvent(WStype_t type, uint8_t *payload, size_t length)
 
 void setup()
 {
-  USE_SERIAL.begin(921600);
+  USE_SERIAL.begin(115200);
   USE_SERIAL.setDebugOutput(true);
 
   USE_SERIAL.println();
@@ -83,7 +86,7 @@ void setup()
   USE_SERIAL.println();
 
   Serial.print("Connecting...");
-  
+
   WiFi.begin(SSID, WIFIPASSWORD);
 
   while (WiFi.status() != WL_CONNECTED)
@@ -116,6 +119,49 @@ void setup()
   webSocket.enableHeartbeat(15000, 3000, 2);
 
   webSocket.sendTXT("Hello from RevolutionCharger!");
+
+  BootNotificationRequest *bootNotificationRequest = new BootNotificationRequest(
+      BootReasonEnumType::PowerUp,
+      "001",
+      "RevolutionCharger",
+      "chargerevolution.net");
+
+  Serial.println("BootnotificationRequest: ");
+  Serial.println(bootNotificationRequest->createMessage().c_str());
+  webSocket.sendTXT(bootNotificationRequest->createMessage().c_str());
+
+  /*
+    // Create the "analog" array
+    JsonArray analogValues = doc.createNestedArray("analog");
+    for (int pin = 0; pin < 6; pin++)
+    {
+      // Read the analog input
+      int value = analogRead(pin);
+
+      // Add the value at the end of the array
+      analogValues.add(value);
+    }
+
+    // Create the "digital" array
+    JsonArray digitalValues = doc.createNestedArray("digital");
+    for (int pin = 0; pin < 14; pin++)
+    {
+      // Read the digital input
+      int value = digitalRead(pin);
+
+      // Add the value at the end of the array
+      digitalValues.add(value);
+    }
+
+    Serial.print(F("Sending: "));
+    serializeJson(doc, Serial);
+    Serial.println();
+
+    [2,"1000000","BootNotification",{
+      "chargePointModel" : "My Charging Station",
+      "chargePointVendor" : "My company name"
+      }
+   */
 }
 
 long lastMessageSent = 0;
