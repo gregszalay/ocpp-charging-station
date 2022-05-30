@@ -108,7 +108,7 @@ void setup()
     }
    */
   // server address, port and URL
-  webSocket.begin("revolutionchargermanager.herokuapp.com", 80, "/", "ocpp2.0.1");
+  webSocket.begin("gergelyszalay.hu", 3000, "/echo", "ocpp2.0.1");
 
   webSocket.onEvent(webSocketEvent);
 
@@ -127,8 +127,9 @@ void setup()
       "chargerevolution.net");
 
   Serial.println("BootnotificationRequest: ");
-  Serial.println(bootNotificationRequest->createMessage().c_str());
-  webSocket.sendTXT(bootNotificationRequest->createMessage().c_str());
+  Serial.println(bootNotificationRequest->createMessage());
+  webSocket.setExtraHeaders();
+  webSocket.sendTXT(bootNotificationRequest->createMessage());
 
   /*
     // Create the "analog" array
