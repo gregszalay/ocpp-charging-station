@@ -1,3 +1,5 @@
+#pragma once
+
 #include <Arduino.h>
 
 #include "FS.h"
@@ -21,33 +23,13 @@ public:
     const char *messageId = nullptr;
     int messageTypeId;
     const char *action = nullptr;
+    String message = "";
 
-    Message(int messageTypeId, const char *action)
-    {
-        this->messageTypeId = messageTypeId;
-        this->action = action;
-        uint8_t uuid_array[32];
-        ESPRandom::uuid4(uuid_array);
-        this->messageId = ESPRandom::uuidToString(uuid_array).c_str();
-    };
-
+    Message(int messageTypeId, const char *action);
     ~Message();
+    virtual String createMessage();
 
-    const char *createMessage();
-
-    int getMessageTypeId()
-    {
-        return this->messageTypeId;
-    };
-
-    const char *getMessageId()
-    {
-        return this->messageId;
-    };
-
-    const char *getAction()
-    {
-        return this->action;
-    };
-
+    int getMessageTypeId();
+    const char *getMessageId();
+    const char *getAction();
 };

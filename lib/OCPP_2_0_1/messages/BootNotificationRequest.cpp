@@ -1,15 +1,29 @@
 #include "BootNotificationRequest.h"
 
+BootNotificationRequest::BootNotificationRequest(
+    BootReasonEnumType reason,
+    const char *serialNumber,
+    const char *model,
+    const char *vendorName,
+    int messageTypeId,
+    const char *action) : Message(messageTypeId, action)
+{
+    this->reason = reason;
+    this->serialNumber = serialNumber;
+    this->model = model;
+    this->vendorName = vendorName;
+}
+
 BootNotificationRequest::~BootNotificationRequest() {}
 
-const char *BootNotificationRequest::createMessage()
+String BootNotificationRequest::createMessage()
 {
     StaticJsonDocument<500> doc;
     JsonArray bootNotificationRequestWrapperArray = doc.createNestedArray();
     bootNotificationRequestWrapperArray.add(this->messageTypeId);
-    bootNotificationRequestWrapperArray.add(this->messageId);
+    bootNotificationRequestWrapperArray.add(messageId);
     bootNotificationRequestWrapperArray.add(this->action);
-    
+
     JsonObject bootNotificationRequest = doc.createNestedObject();
     bootNotificationRequest["reason"] = BOOT_REASON_ENUM_TYPE()[this->reason];
     JsonObject chargingStation = bootNotificationRequest.createNestedObject("chargingStation");
@@ -18,8 +32,7 @@ const char *BootNotificationRequest::createMessage()
     chargingStation["vendorName"] = this->vendorName;
 
     bootNotificationRequestWrapperArray.add(bootNotificationRequest);
-    
-    String output = "";
-    serializeJson(doc, output);
-    return output.c_str();
+
+    serializeJson(doc, message);
+    return message;
 }

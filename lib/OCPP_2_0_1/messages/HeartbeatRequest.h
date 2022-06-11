@@ -19,5 +19,5 @@ class HeartbeatRequest : public Message
 public:
     HeartbeatRequest() : Message(2, "Heartbeat"){};
     ~HeartbeatRequest();
-    const char *createMessage();
+    String createMessage();
 };

@@ -18,6 +18,7 @@
 #include <config.h>
 #include <ArduinoJson.h>
 #include "messages/BootNotificationRequest.h"
+#include "messages/HeartbeatRequest.h"
 #include "enums/BootReasonEnumType.h"
 
 WebSocketsClient webSocket;
@@ -76,6 +77,12 @@ void webSocketEvent(WStype_t type, uint8_t *payload, size_t length)
   }
 }
 
+BootNotificationRequest bootNotificationRequest(
+    BootReasonEnumType::PowerUp,
+    "001",
+    "RevolutionCharger",
+    "chargerevolution.net");
+
 void setup()
 {
   USE_SERIAL.begin(115200);
@@ -120,16 +127,12 @@ void setup()
 
   webSocket.sendTXT("Hello from RevolutionCharger!");
 
-  BootNotificationRequest *bootNotificationRequest = new BootNotificationRequest(
-      BootReasonEnumType::PowerUp,
-      "001",
-      "RevolutionCharger",
-      "chargerevolution.net");
-
   Serial.println("BootnotificationRequest: ");
-  Serial.println(bootNotificationRequest->createMessage());
-  webSocket.setExtraHeaders();
-  webSocket.sendTXT(bootNotificationRequest->createMessage());
+
+  delay(5000);
+  Serial.println(bootNotificationRequest.createMessage());
+
+  webSocket.sendTXT(bootNotificationRequest.createMessage().c_str());
 
   /*
     // Create the "analog" array
@@ -172,7 +175,10 @@ void loop()
   webSocket.loop();
   if (millis() - lastMessageSent >= 5000)
   {
-    webSocket.sendTXT("RevolutionCharger is online!");
+    HeartbeatRequest heartbeatRequest;
+    Serial.println("Outgoing HeartbeatRequest:");
+    Serial.println(heartbeatRequest.createMessage());
+    webSocket.sendTXT(heartbeatRequest.createMessage().c_str());
     lastMessageSent = millis();
   }
 }

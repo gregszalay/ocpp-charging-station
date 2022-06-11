@@ -1,16 +1,22 @@
 #include "HeartbeatRequest.h"
 
-
-
 HeartbeatRequest::~HeartbeatRequest() {}
 
-const char *HeartbeatRequest::createMessage()
+String HeartbeatRequest::createMessage()
 {
     StaticJsonDocument<500> doc;
-    JsonObject HeartbeatRequest = doc.createNestedObject();
+
+    //Create OCPP message wrapper
+    JsonArray messageWrapper = doc.createNestedArray();
+    messageWrapper.add(this->messageTypeId);
+    messageWrapper.add(messageId);
+    messageWrapper.add(this->action);
+
+    //Create message 
+    JsonObject HeartbeatRequest = doc.createNestedObject("chargerTime");
     HeartbeatRequest["chargerTime"] = millis();
-    String output = "";
-    serializeJson(doc, output);
-    const char *resultMessage = output.c_str();
-    return resultMessage;
+
+    messageWrapper.add(HeartbeatRequest);
+    serializeJson(doc, message);
+    return message;
 }

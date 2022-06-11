@@ -28,15 +28,11 @@ public:
         BootReasonEnumType reason,
         const char *serialNumber,
         const char *model,
-        const char *vendorName) : Message(2, "BootNotification")
-    {
-        this->reason = reason;
-        this->serialNumber = serialNumber;
-        this->model = model;
-        this->vendorName = vendorName;
-    }
+        const char *vendorName,
+        int messageTypeId = 2,
+        const char *action = "BootNotification");
 
     ~BootNotificationRequest();
 
-    const char *createMessage();
+    String createMessage();
 };
