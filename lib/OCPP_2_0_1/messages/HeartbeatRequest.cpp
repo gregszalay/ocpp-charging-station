@@ -4,19 +4,19 @@ HeartbeatRequest::~HeartbeatRequest() {}
 
 String HeartbeatRequest::createMessage()
 {
-    StaticJsonDocument<500> doc;
+    const int JSON_CAPACITY = JSON_ARRAY_SIZE(4) + 2 * JSON_OBJECT_SIZE(1);
 
-    //Create OCPP message wrapper
-    JsonArray messageWrapper = doc.createNestedArray();
-    messageWrapper.add(this->messageTypeId);
-    messageWrapper.add(messageId);
-    messageWrapper.add(this->action);
+    StaticJsonDocument<JSON_CAPACITY> doc;
 
-    //Create message 
-    JsonObject HeartbeatRequest = doc.createNestedObject("chargerTime");
-    HeartbeatRequest["chargerTime"] = millis();
+    // Create OCPP message wrapper
+    doc.add(this->messageTypeId);
+    doc.add(this->messageId);
+    doc.add(this->action);
 
-    messageWrapper.add(HeartbeatRequest);
+    // Create message
+    JsonObject heartbeatRequestObj = doc.createNestedObject(/* "chargerTime" */);
+    heartbeatRequestObj["chargerTime"] = millis();
+
     serializeJson(doc, message);
     return message;
 }

@@ -1,11 +1,3 @@
-
-/*
- * WebSocketClient.ino
- *
- *  Created on: 24.05.2015
- *
- */
-
 #include <Arduino.h>
 
 #include "FS.h"
@@ -106,66 +98,33 @@ void setup()
   Serial.println("WiFi connected.");
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
-  /*
-    while (WiFi.begin("Telekom-CM5zbC", "pr4s3asjkgba") != WL_CONNECTED)
-    {
-      USE_SERIAL.printf("Connecting...");
-      USE_SERIAL.flush();
-      delay(1000);
-    }
-   */
+
   // server address, port and URL
   webSocket.begin("gergelyszalay.hu", 3000, "/echo", "ocpp2.0.1");
 
   webSocket.onEvent(webSocketEvent);
 
   // use HTTP Basic Authorization this is optional remove if not needed
-  //[] webSocket.setAuthorization("", "");
+  //  webSocket.setAuthorization("", "");
 
   webSocket.setReconnectInterval(5000);
   webSocket.enableHeartbeat(15000, 3000, 2);
 
-  webSocket.sendTXT("Hello from RevolutionCharger!");
-
-  Serial.println("BootnotificationRequest: ");
+  // webSocket.sendTXT("Hello from RevolutionCharger!");
 
   delay(5000);
-  Serial.println(bootNotificationRequest.createMessage());
+  // Serial.println("BootnotificationRequest: ");
+  // Serial.println(bootNotificationRequest.createMessage());
 
+  // delay(3000);
   webSocket.sendTXT(bootNotificationRequest.createMessage().c_str());
 
   /*
-    // Create the "analog" array
-    JsonArray analogValues = doc.createNestedArray("analog");
-    for (int pin = 0; pin < 6; pin++)
-    {
-      // Read the analog input
-      int value = analogRead(pin);
-
-      // Add the value at the end of the array
-      analogValues.add(value);
-    }
-
-    // Create the "digital" array
-    JsonArray digitalValues = doc.createNestedArray("digital");
-    for (int pin = 0; pin < 14; pin++)
-    {
-      // Read the digital input
-      int value = digitalRead(pin);
-
-      // Add the value at the end of the array
-      digitalValues.add(value);
-    }
-
-    Serial.print(F("Sending: "));
-    serializeJson(doc, Serial);
-    Serial.println();
-
-    [2,"1000000","BootNotification",{
-      "chargePointModel" : "My Charging Station",
-      "chargePointVendor" : "My company name"
-      }
-   */
+      [2,"1000000","BootNotification",{
+        "chargePointModel" : "My Charging Station",
+        "chargePointVendor" : "My company name"
+        }
+     */
 }
 
 long lastMessageSent = 0;
@@ -173,12 +132,14 @@ long lastMessageSent = 0;
 void loop()
 {
   webSocket.loop();
-  if (millis() - lastMessageSent >= 5000)
+  if (millis() - lastMessageSent >= 4000)
   {
     HeartbeatRequest heartbeatRequest;
-    Serial.println("Outgoing HeartbeatRequest:");
-    Serial.println(heartbeatRequest.createMessage());
+    // Serial.println("Outgoing HeartbeatRequest:");
+    // Serial.println(heartbeatRequest.createMessage());
     webSocket.sendTXT(heartbeatRequest.createMessage().c_str());
+    delay(500);
+    webSocket.sendTXT(bootNotificationRequest.createMessage().c_str());
     lastMessageSent = millis();
   }
 }

@@ -18,11 +18,13 @@ BootNotificationRequest::~BootNotificationRequest() {}
 
 String BootNotificationRequest::createMessage()
 {
-    StaticJsonDocument<500> doc;
-    JsonArray bootNotificationRequestWrapperArray = doc.createNestedArray();
-    bootNotificationRequestWrapperArray.add(this->messageTypeId);
-    bootNotificationRequestWrapperArray.add(messageId);
-    bootNotificationRequestWrapperArray.add(this->action);
+    const int JSON_CAPACITY = JSON_ARRAY_SIZE(4) + 2 * JSON_OBJECT_SIZE(3);
+
+    StaticJsonDocument<JSON_CAPACITY> doc;
+
+    doc.add(this->messageTypeId);
+    doc.add(this->messageId);
+    doc.add(this->action);
 
     JsonObject bootNotificationRequest = doc.createNestedObject();
     bootNotificationRequest["reason"] = BOOT_REASON_ENUM_TYPE()[this->reason];
@@ -31,7 +33,23 @@ String BootNotificationRequest::createMessage()
     chargingStation["model"] = this->model;
     chargingStation["vendorName"] = this->vendorName;
 
-    bootNotificationRequestWrapperArray.add(bootNotificationRequest);
+    // bootNotificationRequestWrapperArray.add(bootNotificationRequest);
+
+    /*     serializeJson(doc, message);
+        return message;
+
+        const int capacity = JSON_ARRAY_SIZE(4) + 2 * JSON_OBJECT_SIZE(1);
+
+        StaticJsonDocument<500> doc;
+
+        // Create OCPP message wrapper
+        doc.add(this->messageTypeId);
+        doc.add(this->messageId);
+        doc.add(this->action);
+
+        // Create message
+        JsonObject heartbeatRequestObj = doc.createNestedObject("chargerTime" );
+        heartbeatRequestObj["chargerTime"] = millis(); */
 
     serializeJson(doc, message);
     return message;
