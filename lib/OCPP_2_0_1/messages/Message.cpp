@@ -3,23 +3,24 @@
 Message::Message(int messageTypeId, const char *action)
     : messageTypeId(messageTypeId), action(action)
 {
-    uint8_t uuid_array[16];
-    ESPRandom::uuid4(uuid_array);
-    messageId = ESPRandom::uuidToString(uuid_array).c_str();
+    std::vector<uint8_t> uuid_vector = ESPRandom::uuid4();
+    Serial.println("UUID V4:");
+    Serial.println(ESPRandom::uuidToString(uuid_vector));
+   // uint8_t uuid_array[16];
+    //ESPRandom::uuid1(uuid_array);
+    this->messageId = ESPRandom::uuidToString(uuid_vector);
     Serial.println("UUID generated:");
     Serial.println(messageId);
 };
 
 Message::~Message(){};
 
-String Message::createMessage(){};
-
 int Message::getMessageTypeId()
 {
     return this->messageTypeId;
 };
 
-const char *Message::getMessageId()
+String Message::getMessageId()
 {
     return this->messageId;
 };

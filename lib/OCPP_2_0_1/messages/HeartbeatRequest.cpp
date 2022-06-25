@@ -4,7 +4,7 @@ HeartbeatRequest::~HeartbeatRequest() {}
 
 String HeartbeatRequest::createMessage()
 {
-    const int JSON_CAPACITY = JSON_ARRAY_SIZE(4) + 2 * JSON_OBJECT_SIZE(1);
+    const int JSON_CAPACITY = JSON_ARRAY_SIZE(6) + 2 * JSON_OBJECT_SIZE(5);
 
     StaticJsonDocument<JSON_CAPACITY> doc;
 
@@ -14,7 +14,7 @@ String HeartbeatRequest::createMessage()
     doc.add(this->action);
 
     // Create message
-    JsonObject heartbeatRequestObj = doc.createNestedObject(/* "chargerTime" */);
+    JsonObject heartbeatRequestObj = doc.createNestedObject();
     heartbeatRequestObj["chargerTime"] = millis();
 
     serializeJson(doc, message);

@@ -1,6 +1,6 @@
 #include "BootNotificationRequest.h"
 
-BootNotificationRequest::BootNotificationRequest(
+/* BootNotificationRequest::BootNotificationRequest(
     BootReasonEnumType reason,
     const char *serialNumber,
     const char *model,
@@ -13,12 +13,12 @@ BootNotificationRequest::BootNotificationRequest(
     this->model = model;
     this->vendorName = vendorName;
 }
-
+ */
 BootNotificationRequest::~BootNotificationRequest() {}
 
 String BootNotificationRequest::createMessage()
 {
-    const int JSON_CAPACITY = JSON_ARRAY_SIZE(4) + 2 * JSON_OBJECT_SIZE(3);
+    const int JSON_CAPACITY = JSON_ARRAY_SIZE(6) + 2 * JSON_OBJECT_SIZE(3);
 
     StaticJsonDocument<JSON_CAPACITY> doc;
 
@@ -32,24 +32,6 @@ String BootNotificationRequest::createMessage()
     chargingStation["serialNumber"] = this->serialNumber;
     chargingStation["model"] = this->model;
     chargingStation["vendorName"] = this->vendorName;
-
-    // bootNotificationRequestWrapperArray.add(bootNotificationRequest);
-
-    /*     serializeJson(doc, message);
-        return message;
-
-        const int capacity = JSON_ARRAY_SIZE(4) + 2 * JSON_OBJECT_SIZE(1);
-
-        StaticJsonDocument<500> doc;
-
-        // Create OCPP message wrapper
-        doc.add(this->messageTypeId);
-        doc.add(this->messageId);
-        doc.add(this->action);
-
-        // Create message
-        JsonObject heartbeatRequestObj = doc.createNestedObject("chargerTime" );
-        heartbeatRequestObj["chargerTime"] = millis(); */
 
     serializeJson(doc, message);
     return message;

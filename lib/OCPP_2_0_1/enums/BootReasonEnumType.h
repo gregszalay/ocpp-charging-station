@@ -2,7 +2,7 @@
 
 #include <Arduino.h>
 
-#include <config.h>
+//#include <config.h>
 #include "common/map_init_helper.h"
 
 enum BootReasonEnumType
