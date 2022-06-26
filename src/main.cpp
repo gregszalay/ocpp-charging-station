@@ -3,8 +3,8 @@
 #include <LITTLEFS.h>
 #include "OCPPWebsocketConnection.h"
 #include <ArduinoJson.h>
-#include "messages/BootNotificationRequest.h"
-#include "messages/HeartbeatRequest.h"
+#include "CALL_messages/BootNotificationRequest.h"
+#include "CALL_messages/HeartbeatRequest.h"
 #include "enums/BootReasonEnumType.h"
 //#include "core/OCPP.h"
 
@@ -18,7 +18,7 @@ void setup()
   csmsSocket.open();
 
   Serial.println("bootNotificationRequest");
-  BootNotificationRequest bootNotificationRequest(
+  BootNotificationRequest *bootNotificationRequest = new BootNotificationRequest(
       BootReasonEnumType::PowerUp,
       "001",
       "RevolutionCharger",
@@ -35,7 +35,7 @@ void loop()
 
   if (millis() - lastMessageSent >= 3000)
   {
-    HeartbeatRequest heartbeatRequest;
+    HeartbeatRequest *heartbeatRequest = new HeartbeatRequest;
     csmsSocket.sendRequest(heartbeatRequest);
 
     lastMessageSent = millis();

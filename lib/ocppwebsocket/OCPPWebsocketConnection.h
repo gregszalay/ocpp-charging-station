@@ -2,13 +2,9 @@
 #pragma once
 
 #include <Arduino.h>
-/* #include "FS.h"
-#include <LITTLEFS.h> */
-
-#include "messages/Message.h"
+#include "CALL_messages/CALL_Message.h"
 #include <WebSocketsClient.h>
 #include "Network.h"
-//#include <config.h>
 #include <ArduinoJson.h>
 #include <map>
 
@@ -16,7 +12,7 @@
 
 class OCPPWebsocketConnection
 {
-    std::map<String, std::function<void(StaticJsonDocument<200>)>> responseCallbacks;
+    std::map<String, CALL_Message *> sentMessages;
 
     WebSocketsClient webSocket;
     String serverAddr = "";
@@ -25,6 +21,8 @@ class OCPPWebsocketConnection
     String protocol = "";
 
     void hexdump(const void *mem, uint32_t len, uint8_t cols = 16);
+    void processResponse(uint8_t *payload);
+
     /* void webSocketEvent(WStype_t type, uint8_t *payload, size_t length); */
 
 public:
@@ -32,5 +30,5 @@ public:
     ~OCPPWebsocketConnection();
     void open();
     void loop();
-    void sendRequest(const Message &message);
+    void sendRequest(CALL_Message *message);
 };

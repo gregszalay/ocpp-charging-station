@@ -12,13 +12,17 @@ OCPPWebsocketConnection::~OCPPWebsocketConnection()
 {
 }
 
-StaticJsonDocument<200> deserialize(char *json)
+void OCPPWebsocketConnection::processResponse(uint8_t *payload)
 {
-    StaticJsonDocument<200> doc;
-    deserializeJson(doc, json);
-    Serial.println("messageId: ");
-    Serial.println((const char *)doc[1]);
-    return doc;
+    StaticJsonDocument<200> responseObject;
+    deserializeJson(responseObject, payload);
+    if (sentMessages[responseObject[1]])
+    {
+        CALL_Message *msgPtr = sentMessages[responseObject[1]];
+        msgPtr->getResponseCallback()(responseObject);
+        sentMessages.erase(sentMessages.find(responseObject[1]));
+        delete msgPtr;
+    }
 }
 
 void OCPPWebsocketConnection::open()
@@ -30,9 +34,7 @@ void OCPPWebsocketConnection::open()
     webSocket.begin(this->serverAddr, this->port, this->URL, this->protocol);
 
     webSocket.onEvent([this](WStype_t type, uint8_t *payload, size_t length)
-                      {
-                        StaticJsonDocument<200> doc;
-
+    {    
         switch (type)
         {
         case WStype_DISCONNECTED:
@@ -47,12 +49,8 @@ void OCPPWebsocketConnection::open()
             break;
         case WStype_TEXT:
             USE_SERIAL.printf("[WSc] get text: %s\n", payload);
-
-            doc = deserialize((char*)payload);
-            if(responseCallbacks[doc[1]]){
-                   (responseCallbacks[doc[1]])(doc);
-                   //responseCallbacks.erase(String((const char*)doc[1]));
-            }
+            this->processResponse(payload);
+        
             // send message to server
             // webSocket.sendTXT("message here");
             break;
@@ -113,9 +111,9 @@ void OCPPWebsocketConnection::hexdump(const void *mem, uint32_t len, uint8_t col
     USE_SERIAL.printf("\n");
 }
 
-void OCPPWebsocketConnection::sendRequest(const Message &message)
+void OCPPWebsocketConnection::sendRequest(CALL_Message *message)
 {
-    responseCallbacks[message.getMessageId()] = message.getResponseCallback();
-    String payloadTemp = message.getMessage();
+    sentMessages[message->getMessageId()] = message;
+    String payloadTemp = message->getMessage();
     this->webSocket.sendTXT(payloadTemp);
 }
