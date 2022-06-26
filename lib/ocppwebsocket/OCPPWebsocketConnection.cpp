@@ -1,6 +1,7 @@
 #include "OCPPWebsocketConnection.h"
 
-OCPPWebsocketConnection::OCPPWebsocketConnection(const char *serverAddr, uint16_t port, const char *URL, const char *protocol)
+OCPPWebsocketConnection::OCPPWebsocketConnection(String serverAddr, uint16_t port,
+                                                 String URL, String protocol)
 {
     this->serverAddr = serverAddr;
     this->port = port;
@@ -40,14 +41,8 @@ void OCPPWebsocketConnection::open()
             break;
         case WStype_CONNECTED:
             USE_SERIAL.printf("[WSc] Connected to url: %s\n", payload);
-
             // send message to server when Connected
             // webSocket.sendTXT("Connected");
-
-            doc = deserialize((char*)payload);
-            if(responseCallbacks[doc[1]]){
-                   (responseCallbacks[doc[1]])(doc);
-            }
 
             break;
         case WStype_TEXT:
@@ -56,6 +51,7 @@ void OCPPWebsocketConnection::open()
             doc = deserialize((char*)payload);
             if(responseCallbacks[doc[1]]){
                    (responseCallbacks[doc[1]])(doc);
+                   //responseCallbacks.erase(String((const char*)doc[1]));
             }
             // send message to server
             // webSocket.sendTXT("message here");
@@ -117,9 +113,9 @@ void OCPPWebsocketConnection::hexdump(const void *mem, uint32_t len, uint8_t col
     USE_SERIAL.printf("\n");
 }
 
-void OCPPWebsocketConnection::sendRequest(Message &message, std::function<void(StaticJsonDocument<200> payloadObj)> callback)
+void OCPPWebsocketConnection::sendRequest(const Message &message)
 {
-    this->responseCallbacks[message.getMessageId()] = callback;
-    String payloadTemp = message.createMessage();
+    responseCallbacks[message.getMessageId()] = message.getResponseCallback();
+    String payloadTemp = message.getMessage();
     this->webSocket.sendTXT(payloadTemp);
 }

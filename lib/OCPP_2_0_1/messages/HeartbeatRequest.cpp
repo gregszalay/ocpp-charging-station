@@ -2,21 +2,25 @@
 
 HeartbeatRequest::~HeartbeatRequest() {}
 
-String HeartbeatRequest::createMessage()
+void HeartbeatRequest::createMessage(String &destinationString) const
 {
-    const int JSON_CAPACITY = JSON_ARRAY_SIZE(6) + 2 * JSON_OBJECT_SIZE(5);
+    StaticJsonDocument<500> doc;
 
-    StaticJsonDocument<JSON_CAPACITY> doc;
-
-    // Create OCPP message wrapper
     doc.add(this->messageTypeId);
     doc.add(this->messageId);
     doc.add(this->action);
 
-    // Create message
-    JsonObject heartbeatRequestObj = doc.createNestedObject();
-    heartbeatRequestObj["chargerTime"] = millis();
+    JsonObject messageCore = doc.createNestedObject();
+    messageCore["chargerTime"] = millis();
 
-    serializeJson(doc, message);
-    return message;
+    serializeJson(doc, destinationString);
+}
+
+
+std::function<void(StaticJsonDocument<200>)> HeartbeatRequest::getResponseCallback() const
+{
+    return ([](StaticJsonDocument<200> payloadObj)
+            {
+        Serial.print("chargerTime:    ");
+        Serial.println((long)payloadObj[3]["chargerTime"]); });
 }

@@ -6,9 +6,13 @@
 
 class HeartbeatRequest : public Message
 {
+    void createMessage(String &destinationString) const override;
 
 public:
-    HeartbeatRequest() : Message(2, "Heartbeat"){};
+    HeartbeatRequest() : Message(2, "Heartbeat")
+    {
+        createMessage(message);
+    };
     ~HeartbeatRequest();
-    String createMessage() override;
+    std::function<void(StaticJsonDocument<200>)> getResponseCallback() const override;
 };

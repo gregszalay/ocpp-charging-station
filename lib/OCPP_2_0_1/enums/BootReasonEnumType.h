@@ -20,5 +20,5 @@ enum BootReasonEnumType
 
 };
 
-std::map<BootReasonEnumType, const char *> BOOT_REASON_ENUM_TYPE();
+std::map<BootReasonEnumType, String> BOOT_REASON_ENUM_TYPE();
 

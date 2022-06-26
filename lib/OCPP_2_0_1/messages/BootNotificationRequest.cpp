@@ -16,23 +16,28 @@
  */
 BootNotificationRequest::~BootNotificationRequest() {}
 
-String BootNotificationRequest::createMessage()
+void BootNotificationRequest::createMessage(String &destinationString) const
 {
-    const int JSON_CAPACITY = JSON_ARRAY_SIZE(6) + 2 * JSON_OBJECT_SIZE(3);
-
-    StaticJsonDocument<JSON_CAPACITY> doc;
+    StaticJsonDocument<500> doc;
 
     doc.add(this->messageTypeId);
     doc.add(this->messageId);
     doc.add(this->action);
-
-    JsonObject bootNotificationRequest = doc.createNestedObject();
-    bootNotificationRequest["reason"] = BOOT_REASON_ENUM_TYPE()[this->reason];
-    JsonObject chargingStation = bootNotificationRequest.createNestedObject("chargingStation");
+    JsonObject messageCore = doc.createNestedObject();
+    messageCore["reason"] = BOOT_REASON_ENUM_TYPE()[this->reason];
+    JsonObject chargingStation = messageCore.createNestedObject("chargingStation");
     chargingStation["serialNumber"] = this->serialNumber;
     chargingStation["model"] = this->model;
     chargingStation["vendorName"] = this->vendorName;
 
-    serializeJson(doc, message);
-    return message;
+    serializeJson(doc, destinationString);
+}
+
+std::function<void(StaticJsonDocument<200>)> BootNotificationRequest::getResponseCallback() const
+{
+    return [](StaticJsonDocument<200> payloadObj)
+    {
+        Serial.print("Reason:   ");
+        Serial.println((const char *)payloadObj[3]["reason"]);
+    };
 }

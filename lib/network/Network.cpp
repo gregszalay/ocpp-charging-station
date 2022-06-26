@@ -42,4 +42,5 @@ Network::Network()
 
 Network::~Network()
 {
+    delete instance;
 }
