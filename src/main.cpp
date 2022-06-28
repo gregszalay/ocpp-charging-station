@@ -1,21 +1,21 @@
 #include <Arduino.h>
 #include "FS.h"
 #include <LITTLEFS.h>
-#include "OCPPWebsocketConnection.h"
+#include "WebsocketToCSMS.h"
 #include <ArduinoJson.h>
 #include "CALL_messages/BootNotificationRequest.h"
 #include "CALL_messages/HeartbeatRequest.h"
 #include "enums/BootReasonEnumType.h"
 //#include "core/OCPP.h"
 
-OCPPWebsocketConnection csmsSocket("gergelyszalay.hu", 3000, "/echo", "ocpp2.0.1");
+WebsocketToCSMS CSMS_GOCPP_VPS("gergelyszalay.hu", 3000, "/echo", "ocpp2.0.1");
 
 void setup()
 {
   USE_SERIAL.begin(115200);
   USE_SERIAL.setDebugOutput(true);
 
-  csmsSocket.open();
+  CSMS_GOCPP_VPS.open();
 
   Serial.println("bootNotificationRequest");
   BootNotificationRequest *bootNotificationRequest = new BootNotificationRequest(
@@ -24,19 +24,19 @@ void setup()
       "RevolutionCharger",
       "chargerevolution.net");
 
-  csmsSocket.sendRequest(bootNotificationRequest);
+  CSMS_GOCPP_VPS.sendRequest(bootNotificationRequest);
 }
 
 long lastMessageSent = 0;
 
 void loop()
 {
-  csmsSocket.loop();
+  CSMS_GOCPP_VPS.loop();
 
   if (millis() - lastMessageSent >= 3000)
   {
     HeartbeatRequest *heartbeatRequest = new HeartbeatRequest;
-    csmsSocket.sendRequest(heartbeatRequest);
+    CSMS_GOCPP_VPS.sendRequest(heartbeatRequest);
 
     lastMessageSent = millis();
   }

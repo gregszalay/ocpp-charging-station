@@ -10,7 +10,7 @@
 
 #define USE_SERIAL Serial
 
-class OCPPWebsocketConnection
+class WebsocketToCSMS
 {
     std::map<String, CALL_Message *> sentMessages;
 
@@ -26,8 +26,8 @@ class OCPPWebsocketConnection
     /* void webSocketEvent(WStype_t type, uint8_t *payload, size_t length); */
 
 public:
-    OCPPWebsocketConnection(String serverAddr, uint16_t port, String URL, String protocol);
-    ~OCPPWebsocketConnection();
+    WebsocketToCSMS(String serverAddr, uint16_t port, String URL, String protocol);
+    ~WebsocketToCSMS();
     void open();
     void loop();
     void sendRequest(CALL_Message *message);

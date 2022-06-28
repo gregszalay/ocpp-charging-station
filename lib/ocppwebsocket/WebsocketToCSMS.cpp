@@ -1,6 +1,6 @@
-#include "OCPPWebsocketConnection.h"
+#include "WebsocketToCSMS.h"
 
-OCPPWebsocketConnection::OCPPWebsocketConnection(String serverAddr, uint16_t port,
+WebsocketToCSMS::WebsocketToCSMS(String serverAddr, uint16_t port,
                                                  String URL, String protocol)
 {
     this->serverAddr = serverAddr;
@@ -8,11 +8,12 @@ OCPPWebsocketConnection::OCPPWebsocketConnection(String serverAddr, uint16_t por
     this->URL = URL;
     this->protocol = protocol;
 }
-OCPPWebsocketConnection::~OCPPWebsocketConnection()
+
+WebsocketToCSMS::~WebsocketToCSMS()
 {
 }
 
-void OCPPWebsocketConnection::processResponse(uint8_t *payload)
+void WebsocketToCSMS::processResponse(uint8_t *payload)
 {
     StaticJsonDocument<200> responseObject;
     deserializeJson(responseObject, payload);
@@ -25,7 +26,7 @@ void OCPPWebsocketConnection::processResponse(uint8_t *payload)
     }
 }
 
-void OCPPWebsocketConnection::open()
+void WebsocketToCSMS::open()
 {
 
     NETWORK()->setup();
@@ -83,7 +84,7 @@ void OCPPWebsocketConnection::open()
         delay(500);
     }
 }
-void OCPPWebsocketConnection::loop()
+void WebsocketToCSMS::loop()
 {
     NETWORK()->loop();
     webSocket.loop();
@@ -95,7 +96,7 @@ void OCPPWebsocketConnection::loop()
     }
 }
 
-void OCPPWebsocketConnection::hexdump(const void *mem, uint32_t len, uint8_t cols)
+void WebsocketToCSMS::hexdump(const void *mem, uint32_t len, uint8_t cols)
 {
     const uint8_t *src = (const uint8_t *)mem;
     USE_SERIAL.printf("\n[HEXDUMP] Address: 0x%08X len: 0x%X (%d)", (ptrdiff_t)src, len, len);
@@ -111,7 +112,7 @@ void OCPPWebsocketConnection::hexdump(const void *mem, uint32_t len, uint8_t col
     USE_SERIAL.printf("\n");
 }
 
-void OCPPWebsocketConnection::sendRequest(CALL_Message *message)
+void WebsocketToCSMS::sendRequest(CALL_Message *message)
 {
     sentMessages[message->getMessageId()] = message;
     String payloadTemp = message->getMessage();
