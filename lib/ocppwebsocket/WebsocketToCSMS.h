@@ -2,6 +2,7 @@
 #pragma once
 
 #include <Arduino.h>
+#include "MemoryCheck.h"
 #include "CALL_messages/CALL_Message.h"
 #include <WebSocketsClient.h>
 #include "Network.h"

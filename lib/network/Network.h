@@ -1,6 +1,7 @@
 //#pragma once
 
 #include "Arduino.h"
+#include "MemoryCheck.h"
 /* #include "FS.h"
 #include <LITTLEFS.h> */
 #include <WiFi.h>
@@ -15,7 +16,11 @@ public:
     static Network *getInstance()
     {
         if (!Network::instance)
+        {
             instance = new Network;
+              MemoryCheck::newnew();
+
+        }
         return instance;
     }
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Arduino.h>
+#include "MemoryCheck.h"
 #include <ArduinoJson.h>
 #include <ESPRandom.h>
 
@@ -16,9 +17,13 @@ protected:
     virtual void buildPayload() = 0;
     void buildMessage();
     void buildFrame();
+
 public:
     CALL_Message(uint8_t messageTypeId, String action);
-    virtual ~CALL_Message(){};
+    virtual ~CALL_Message()
+    {
+        MemoryCheck::freeOne();
+    };
     virtual std::function<void(StaticJsonDocument<200>)> getResponseCallback() const = 0;
     uint8_t getMessageTypeId() const;
     String getMessageId() const;

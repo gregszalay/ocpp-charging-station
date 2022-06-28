@@ -42,5 +42,5 @@ Network::Network()
 
 Network::~Network()
 {
-    delete instance;
+    MemoryCheck::freeOne();
 }
