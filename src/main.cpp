@@ -4,9 +4,9 @@
 #include <LITTLEFS.h>
 #include "WebsocketToCSMS.h"
 #include <ArduinoJson.h>
-#include "CALL_messages/BootNotificationRequest.h"
-#include "CALL_messages/HeartbeatRequest.h"
-#include "enums/BootReasonEnumType.h"
+#include "BootNotificationRequest.h"
+#include "HeartbeatRequest.h"
+#include "AuthorizeRequest.h"
 //#include "core/OCPP.h"
 
 // This needs to be the first object created!
@@ -21,15 +21,22 @@ void setup()
 
   CSMS_GOCPP_VPS.open();
 
-  Serial.println("bootNotificationRequest");
+  // Bootnotification
+  Serial.println("bootNotification...");
   BootNotificationRequest *bootNotificationRequest = new BootNotificationRequest(
       BootReasonEnumType::PowerUp,
       "001",
       "RevolutionCharger",
       "chargerevolution.net");
   MemoryCheck::newnew();
-
   CSMS_GOCPP_VPS.sendRequest(bootNotificationRequest);
+
+  // AuthorizeReq
+  Serial.println("authorize...");
+  IdTokenType idTokenZ("abcd", IdTokenEnumType::ISO14443);
+  AuthorizeRequest *authorizeRequest = new AuthorizeRequest(idTokenZ);
+  MemoryCheck::newnew();
+  CSMS_GOCPP_VPS.sendRequest(authorizeRequest);
 }
 
 long lastMessageSent = 0;

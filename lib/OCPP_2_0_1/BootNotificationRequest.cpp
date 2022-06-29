@@ -17,7 +17,8 @@ BootNotificationRequest::~BootNotificationRequest() {}
 void BootNotificationRequest::buildPayload()
 {
     JsonObject messageCore = jsonDoc.createNestedObject();
-    messageCore["reason"] = BOOT_REASON_ENUM_TYPE()[this->reason];
+    messageCore["reason"] = "sdfvdfsvbxdf";
+    //messageCore["reason"] = BOOT_REASON_ENUM_TYPE()[this->reason];
     JsonObject chargingStation = messageCore.createNestedObject("chargingStation");
     chargingStation["serialNumber"] = this->serialNumber;
     chargingStation["model"] = this->model;

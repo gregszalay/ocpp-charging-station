@@ -1,9 +1,10 @@
 #pragma once
 
 #include <Arduino.h>
+#include <map>
 
 //#include <config.h>
-#include "common/map_init_helper.h"
+
 
 enum BootReasonEnumType
 {
@@ -20,5 +21,5 @@ enum BootReasonEnumType
 
 };
 
-std::map<BootReasonEnumType, String> BOOT_REASON_ENUM_TYPE();
+std::map<BootReasonEnumType, String>& BOOT_REASON_ENUM_TYPE();
 

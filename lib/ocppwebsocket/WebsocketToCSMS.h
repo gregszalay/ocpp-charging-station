@@ -2,8 +2,9 @@
 #pragma once
 
 #include <Arduino.h>
-#include "MemoryCheck.h"
-#include "CALL_messages/CALL_Message.h"
+//#include "CALL_messages/CALL_Message.h"
+#include "BootNotificationRequest.h"
+
 #include <WebSocketsClient.h>
 #include "Network.h"
 #include <ArduinoJson.h>

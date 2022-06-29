@@ -3,7 +3,7 @@
 #include <Arduino.h>
 #include <ArduinoJson.h>
 #include "CALL_Message.h"
-#include "enums/BootReasonEnumType.h"
+#include "BootReasonEnumType.h"
 
 class BootNotificationRequest : public CALL_Message
 {
