@@ -1,7 +1,7 @@
 #include "WebsocketToCSMS.h"
 
 WebsocketToCSMS::WebsocketToCSMS(String serverAddr, uint16_t port,
-                                                 String URL, String protocol)
+                                 String URL, String protocol)
 {
     this->serverAddr = serverAddr;
     this->port = port;
@@ -19,7 +19,7 @@ void WebsocketToCSMS::processResponse(uint8_t *payload)
     deserializeJson(responseObject, payload);
     if (sentMessages[responseObject[1]])
     {
-        CALL_Message *msgPtr = sentMessages[responseObject[1]];
+        MESSAGE *msgPtr = sentMessages[responseObject[1]];
         msgPtr->getResponseCallback()(responseObject);
         sentMessages.erase(sentMessages.find(responseObject[1]));
         delete msgPtr;
@@ -35,7 +35,7 @@ void WebsocketToCSMS::open()
     webSocket.begin(this->serverAddr, this->port, this->URL, this->protocol);
 
     webSocket.onEvent([this](WStype_t type, uint8_t *payload, size_t length)
-    {    
+                      {    
         switch (type)
         {
         case WStype_DISCONNECTED:
@@ -112,9 +112,9 @@ void WebsocketToCSMS::hexdump(const void *mem, uint32_t len, uint8_t cols)
     USE_SERIAL.printf("\n");
 }
 
-void WebsocketToCSMS::sendRequest(CALL_Message *message)
+void WebsocketToCSMS::sendRequest(MESSAGE *message)
 {
     sentMessages[message->getMessageId()] = message;
-    String payloadTemp = message->getMessage();
+    String payloadTemp = (*message);
     this->webSocket.sendTXT(payloadTemp);
 }

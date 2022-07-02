@@ -2,7 +2,7 @@
 #include "AuthorizeRequest.h"
 #include "IdTokenEnumType.h"
 
-AuthorizeRequest::AuthorizeRequest(IdTokenType _idToken) : CALL_Message(2, "Authorize"), idToken(_idToken)
+AuthorizeRequest::AuthorizeRequest(IdTokenType _idToken) : CALL_Message("Authorize"), idToken(_idToken)
 {
     this->idToken = _idToken;
 }
@@ -29,3 +29,11 @@ std::function<void(StaticJsonDocument<200>)> AuthorizeRequest::getResponseCallba
         Serial.println((const char *)payloadObj[3]["idToken"]["type"]);
     };
 }
+
+/* AuthorizeRequest::operator String() const
+{
+    this->buildMessage();
+    serializeJson(jsonDoc, message);
+    return message;
+}
+ */

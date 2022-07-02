@@ -16,4 +16,5 @@ public:
     ~AuthorizeRequest();
 
     std::function<void(StaticJsonDocument<200>)> getResponseCallback() const override;
+
 };

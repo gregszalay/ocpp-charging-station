@@ -2,7 +2,6 @@
 #pragma once
 
 #include <Arduino.h>
-//#include "CALL_messages/CALL_Message.h"
 #include "BootNotificationRequest.h"
 
 #include <WebSocketsClient.h>
@@ -14,7 +13,7 @@
 
 class WebsocketToCSMS
 {
-    std::map<String, CALL_Message *> sentMessages;
+    std::map<String, MESSAGE *> sentMessages;
 
     WebSocketsClient webSocket;
     String serverAddr = "";
@@ -32,5 +31,5 @@ public:
     ~WebsocketToCSMS();
     void open();
     void loop();
-    void sendRequest(CALL_Message *message);
+    void sendRequest(MESSAGE *message);
 };

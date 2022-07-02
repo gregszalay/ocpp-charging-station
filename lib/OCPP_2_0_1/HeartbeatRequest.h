@@ -10,7 +10,7 @@ class HeartbeatRequest : public CALL_Message
     void buildPayload() override;
 
 public:
-    HeartbeatRequest() : CALL_Message(2, "Heartbeat"){};
+    HeartbeatRequest() : CALL_Message("Heartbeat"){};
     ~HeartbeatRequest();
     std::function<void(StaticJsonDocument<200>)> getResponseCallback() const override;
 };

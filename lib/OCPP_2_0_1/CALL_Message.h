@@ -3,29 +3,16 @@
 #include "MemoryCheck.h"
 #include <ArduinoJson.h>
 #include <ESPRandom.h>
+#include "MESSAGE.h"
 
-class CALL_Message
+class CALL_Message : public MESSAGE
 {
 protected:
-  String messageId;
-  uint8_t messageTypeId;
   String action;
-  String message;
-  StaticJsonDocument<500> jsonDoc;
-
-  virtual void buildPayload() = 0;
-  void buildMessage();
-  void buildFrame();
 
 public:
-  CALL_Message(uint8_t messageTypeId, String action);
-  virtual ~CALL_Message()
-  {
-    MemoryCheck::freeOne();
-  }
-  virtual std::function<void(StaticJsonDocument<200>)> getResponseCallback() const = 0;
-  uint8_t getMessageTypeId() const;
-  String getMessageId() const;
+  void buildFrame();
+  CALL_Message(String _action);
   String getAction() const;
-  String getMessage();
+
 };
