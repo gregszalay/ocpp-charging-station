@@ -1,32 +1,23 @@
-#include "WebsocketToCSMS.h"
+#include "WebsocketConnection.h"
 
-WebsocketToCSMS::WebsocketToCSMS(String serverAddr, uint16_t port,
-                                 String URL, String protocol)
-{
-    this->serverAddr = serverAddr;
-    this->port = port;
-    this->URL = URL;
-    this->protocol = protocol;
-}
-
-WebsocketToCSMS::~WebsocketToCSMS()
+WebsocketConnection::WebsocketConnection(String _serverAddr, uint16_t _port,
+                                         String _URL, String _protocol,
+                                         std::function<void(uint8_t *)> _onMessage)
+    : serverAddr(_serverAddr),
+      port(_port),
+      URL(_URL),
+      protocol(_protocol),
+      onMessage(_onMessage)
 {
 }
 
-void WebsocketToCSMS::processResponse(uint8_t *payload)
+std::function<void(uint8_t *payload)> onMessage;
+
+WebsocketConnection::~WebsocketConnection()
 {
-    StaticJsonDocument<200> responseObject;
-    deserializeJson(responseObject, payload);
-    if (sentMessages[responseObject[1]])
-    {
-        MESSAGE *msgPtr = sentMessages[responseObject[1]];
-        msgPtr->getResponseCallback()(responseObject);
-        sentMessages.erase(sentMessages.find(responseObject[1]));
-        delete msgPtr;
-    }
 }
 
-void WebsocketToCSMS::open()
+void WebsocketConnection::open()
 {
 
     NETWORK()->setup();
@@ -50,8 +41,7 @@ void WebsocketToCSMS::open()
             break;
         case WStype_TEXT:
             USE_SERIAL.printf("[WSc] get text: %s\n", payload);
-            this->processResponse(payload);
-        
+            this->onMessage(payload);
             // send message to server
             // webSocket.sendTXT("message here");
             break;
@@ -84,7 +74,7 @@ void WebsocketToCSMS::open()
         delay(500);
     }
 }
-void WebsocketToCSMS::loop()
+void WebsocketConnection::loop()
 {
     NETWORK()->loop();
     webSocket.loop();
@@ -96,7 +86,7 @@ void WebsocketToCSMS::loop()
     }
 }
 
-void WebsocketToCSMS::hexdump(const void *mem, uint32_t len, uint8_t cols)
+void WebsocketConnection::hexdump(const void *mem, uint32_t len, uint8_t cols)
 {
     const uint8_t *src = (const uint8_t *)mem;
     USE_SERIAL.printf("\n[HEXDUMP] Address: 0x%08X len: 0x%X (%d)", (ptrdiff_t)src, len, len);
@@ -110,11 +100,4 @@ void WebsocketToCSMS::hexdump(const void *mem, uint32_t len, uint8_t cols)
         src++;
     }
     USE_SERIAL.printf("\n");
-}
-
-void WebsocketToCSMS::sendRequest(MESSAGE *message)
-{
-    sentMessages[message->getMessageId()] = message;
-    String payloadTemp = (*message);
-    this->webSocket.sendTXT(payloadTemp);
 }

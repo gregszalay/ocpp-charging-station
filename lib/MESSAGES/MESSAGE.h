@@ -12,19 +12,20 @@
 #include <Arduino.h>
 #include <ArduinoJson.h>
 #include <ESPRandom.h>
+#include <map>
 #include "MemoryCheck.h"
 #include "ENUMERATIONS.h"
 #include "DATATYPES.h"
 
 enum MESSAGE_TYPE_ID_ENUM
 {
-    CALL = 2,       // Request
-    CALLRESULT = 3, // Reply
-    CALLERROR = 4,  // Error message
+    CALL_TYPE = 2,       // Request
+    CALLRESULT_TYPE = 3, // Reply
+    CALLERROR_TYPE = 4,  // Error message
 };
 
 /*******************************************************************************
- * @brief General message (pure virtual)
+ * @brief General message
  */
 class MESSAGE
 {
@@ -33,14 +34,13 @@ protected:
     String messageId;
     String message;
     StaticJsonDocument<500> jsonDoc;
-    virtual void buildPayload() = 0;
+    virtual void buildPayload(){};
     void buildMessage();
 
 public:
     void buildFrame();
     MESSAGE(uint8_t _messageTypeId, String _messageId = "");
     virtual ~MESSAGE() { MemoryCheck::freeOne(); }
-    virtual std::function<void(StaticJsonDocument<200>)> getResponseCallback() const = 0;
     uint8_t getMessageTypeId() const;
     String getMessageId() const;
     String getMessage();
@@ -48,7 +48,7 @@ public:
 };
 
 /*******************************************************************************
- * @brief General CALL message
+ * @brief Parent class for all CALL type messages.
  * Reference:
  * [OCPP 2.0.1][Part 4 - JSON over WebSockets implementation guide][4.2.1]
  */
@@ -64,7 +64,7 @@ public:
 };
 
 /*******************************************************************************
- * @brief General CALLRESULT message
+ * @brief Parent class for all CALLRESULT type messages.
  * Reference:
  * [OCPP 2.0.1][Part 4 - JSON over WebSockets implementation guide][4.2.2]
  */
@@ -75,7 +75,7 @@ public:
 };
 
 /*******************************************************************************
- * @brief General CALLERROR message
+ * @brief Parent class for all CALLERROR type messages.
  * Reference:
  * [OCPP 2.0.1][Part 4 - JSON over WebSockets implementation guide][4.2.3]
  */
@@ -92,3 +92,4 @@ public:
     String getErrorCode() const { return this->errorCode; }
     String getErrorDescription() const { return this->errorDescription; }
 };
+

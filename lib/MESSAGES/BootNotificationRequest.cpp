@@ -1,7 +1,7 @@
 #include "BootNotificationRequest.h"
 
 BootNotificationRequest::BootNotificationRequest(
-    BootReasonEnumType reason,
+    ENUMERATIONS::BootReasonEnumType reason,
     const char *serialNumber,
     const char *model,
     const char *vendorName) : CALL("BootNotification")
@@ -23,13 +23,4 @@ void BootNotificationRequest::buildPayload()
     chargingStation["serialNumber"] = this->serialNumber;
     chargingStation["model"] = this->model;
     chargingStation["vendorName"] = this->vendorName;
-}
-
-std::function<void(StaticJsonDocument<200>)> BootNotificationRequest::getResponseCallback() const
-{
-    return [](StaticJsonDocument<200> payloadObj)
-    {
-        Serial.print("Reason:   ");
-        Serial.println((const char *)payloadObj[3]["reason"]);
-    };
 }

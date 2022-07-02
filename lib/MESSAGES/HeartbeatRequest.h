@@ -9,5 +9,4 @@ class HeartbeatRequest : public CALL
 public:
     HeartbeatRequest() : CALL("Heartbeat"){};
     ~HeartbeatRequest();
-    std::function<void(StaticJsonDocument<200>)> getResponseCallback() const override;
 };
