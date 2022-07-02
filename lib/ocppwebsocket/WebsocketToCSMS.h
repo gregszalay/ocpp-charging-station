@@ -3,7 +3,6 @@
 
 #include <Arduino.h>
 #include "BootNotificationRequest.h"
-
 #include <WebSocketsClient.h>
 #include "Network.h"
 #include <ArduinoJson.h>

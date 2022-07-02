@@ -1,8 +1,5 @@
 #pragma once
-
-#include <Arduino.h>
-#include <ArduinoJson.h>
-#include "CALL.h"
+#include "MESSAGE.h"
 
 class HeartbeatRequest : public CALL
 {

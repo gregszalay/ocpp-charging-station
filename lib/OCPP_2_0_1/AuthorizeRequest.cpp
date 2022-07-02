@@ -1,6 +1,4 @@
-
 #include "AuthorizeRequest.h"
-#include "IdTokenEnumType.h"
 
 AuthorizeRequest::AuthorizeRequest(IdTokenType _idToken) : CALL("Authorize"), idToken(_idToken)
 {

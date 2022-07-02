@@ -1,9 +1,5 @@
 #pragma once
-
-#include <Arduino.h>
-#include <ArduinoJson.h>
-#include "CALL.h"
-#include "BootReasonEnumType.h"
+#include "MESSAGE.h"
 
 class BootNotificationRequest : public CALL
 {

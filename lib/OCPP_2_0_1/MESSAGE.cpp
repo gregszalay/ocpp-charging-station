@@ -1,5 +1,7 @@
 #include "MESSAGE.h"
 
+/******************************* MESSAGE *******************************/
+
 MESSAGE::MESSAGE(uint8_t _messageTypeId, String _messageId)
     : messageTypeId(_messageTypeId), messageId(_messageId){};
 
@@ -30,4 +32,47 @@ void MESSAGE::buildFrame()
 {
     jsonDoc.add(messageTypeId);
     jsonDoc.add(messageId);
+}
+
+/******************************* CALL *******************************/
+
+CALL::CALL(String _action)
+    : MESSAGE(MESSAGE_TYPE_ID_ENUM::CALL)
+{
+    std::vector<uint8_t> uuid_vector = ESPRandom::uuid4();
+    messageId = ESPRandom::uuidToString(uuid_vector);
+};
+
+String CALL::getAction() const
+{
+    return this->action;
+};
+
+void CALL::buildFrame()
+{
+    MESSAGE::buildFrame();
+    jsonDoc.add(action);
+}
+
+/******************************* CALLRESULT *******************************/
+
+CALLRESULT::CALLRESULT(uint8_t _messageTypeId, String _messageId)
+    : MESSAGE(MESSAGE_TYPE_ID_ENUM::CALLRESULT, _messageId) {}
+
+/******************************* CALLERROR *******************************/
+
+CALLERROR::CALLERROR(
+    String _messageId,
+    String _errorCode,
+    String _errorDescription) : MESSAGE(MESSAGE_TYPE_ID_ENUM::CALLERROR, _messageId)
+{
+    this->messageId = _messageId;
+    this->errorCode = _errorCode;
+}
+
+void CALLERROR::buildPayload()
+{
+    jsonDoc.add(this->errorCode);
+    jsonDoc.add(this->errorDescription);
+    jsonDoc.add("");
 }

@@ -1,7 +1,8 @@
-
 #pragma once
 #include "Arduino.h"
-#include "IdTokenEnumType.h"
+#include "ENUMERATIONS.h"
+
+/******************************************************************************/
 
 class IdTokenType
 {
