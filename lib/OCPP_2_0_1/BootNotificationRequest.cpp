@@ -4,7 +4,7 @@ BootNotificationRequest::BootNotificationRequest(
     BootReasonEnumType reason,
     const char *serialNumber,
     const char *model,
-    const char *vendorName) : CALL_Message("BootNotification")
+    const char *vendorName) : CALL("BootNotification")
 {
     this->reason = reason;
     this->serialNumber = String(serialNumber);

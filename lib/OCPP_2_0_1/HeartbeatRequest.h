@@ -2,15 +2,15 @@
 
 #include <Arduino.h>
 #include <ArduinoJson.h>
-#include "CALL_Message.h"
+#include "CALL.h"
 
-class HeartbeatRequest : public CALL_Message
+class HeartbeatRequest : public CALL
 {
 
     void buildPayload() override;
 
 public:
-    HeartbeatRequest() : CALL_Message("Heartbeat"){};
+    HeartbeatRequest() : CALL("Heartbeat"){};
     ~HeartbeatRequest();
     std::function<void(StaticJsonDocument<200>)> getResponseCallback() const override;
 };

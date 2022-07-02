@@ -2,10 +2,10 @@
 
 #include <Arduino.h>
 #include <ArduinoJson.h>
-#include "CALL_Message.h"
+#include "CALL.h"
 #include "IdTokenType.h"
 
-class AuthorizeRequest : public CALL_Message
+class AuthorizeRequest : public CALL
 {
     IdTokenType idToken;
     void buildPayload() override;

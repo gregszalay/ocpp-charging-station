@@ -2,10 +2,10 @@
 
 #include <Arduino.h>
 #include <ArduinoJson.h>
-#include "CALL_Message.h"
+#include "CALL.h"
 #include "BootReasonEnumType.h"
 
-class BootNotificationRequest : public CALL_Message
+class BootNotificationRequest : public CALL
 {
     BootReasonEnumType reason = BootReasonEnumType::Unknown;
     String serialNumber;

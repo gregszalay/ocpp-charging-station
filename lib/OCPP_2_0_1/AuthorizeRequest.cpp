@@ -2,7 +2,7 @@
 #include "AuthorizeRequest.h"
 #include "IdTokenEnumType.h"
 
-AuthorizeRequest::AuthorizeRequest(IdTokenType _idToken) : CALL_Message("Authorize"), idToken(_idToken)
+AuthorizeRequest::AuthorizeRequest(IdTokenType _idToken) : CALL("Authorize"), idToken(_idToken)
 {
     this->idToken = _idToken;
 }

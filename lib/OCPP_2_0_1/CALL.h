@@ -5,14 +5,14 @@
 #include <ESPRandom.h>
 #include "MESSAGE.h"
 
-class CALL_Message : public MESSAGE
+class CALL : public MESSAGE
 {
 protected:
   String action;
 
 public:
   void buildFrame();
-  CALL_Message(String _action);
+  CALL(String _action);
   String getAction() const;
 
 };
