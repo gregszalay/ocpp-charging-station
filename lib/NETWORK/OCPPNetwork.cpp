@@ -1,14 +1,14 @@
-#include "Network.h"
+#include "OCPPNetwork.h"
 #include <config.h>
 
-Network *NETWORK()
+OCPPNetwork *OCPP_NETWORK()
 {
-    return Network::getInstance();
+    return OCPPNetwork::getInstance();
 }
 
-Network *Network::instance = nullptr;
+OCPPNetwork *OCPPNetwork::instance = nullptr;
 
-void Network::setup()
+void OCPPNetwork::setup()
 {
     Serial.print("Connecting...");
 
@@ -26,21 +26,21 @@ void Network::setup()
     Serial.println(WiFi.localIP());
 }
 
-void Network::loop()
+void OCPPNetwork::loop()
 {
     if (WiFi.status() != WL_CONNECTED)
     {
-        Serial.print("Network disconnected. Rebooting...");
+        Serial.print("OCPPNetwork disconnected. Rebooting...");
         delay(1000);
         ESP.restart();
     }
 }
 
-Network::Network()
+OCPPNetwork::OCPPNetwork()
 {
 }
 
-Network::~Network()
+OCPPNetwork::~OCPPNetwork()
 {
     MemoryCheck::freeOne();
 }

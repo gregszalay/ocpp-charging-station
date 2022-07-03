@@ -1,29 +1,25 @@
-#include "WebsocketConnection.h"
+#include "MyArduinoWebsocketsAdapter.h"
 
-WebsocketConnection::WebsocketConnection(String _serverAddr, uint16_t _port,
-                                         String _URL, String _protocol,
-                                         std::function<void(uint8_t *)> _onMessage)
-    : serverAddr(_serverAddr),
-      port(_port),
-      URL(_URL),
-      protocol(_protocol),
-      onMessage(_onMessage)
+MyArduinoWebsocketsAdapter::MyArduinoWebsocketsAdapter(WebsocketServerAddress &_wsAddress, OCPPEventHandlers *_eventHandlersPtr)
+    : OCPPWebsocketVirtual(_wsAddress, _eventHandlersPtr)
 {
 }
 
-std::function<void(uint8_t *payload)> onMessage;
-
-WebsocketConnection::~WebsocketConnection()
+MyArduinoWebsocketsAdapter::~MyArduinoWebsocketsAdapter()
 {
 }
 
-void WebsocketConnection::open()
+void MyArduinoWebsocketsAdapter::open()
 {
 
-    NETWORK()->setup();
+    OCPP_NETWORK()->setup();
 
     // server address, port and URL
-    webSocket.begin(this->serverAddr, this->port, this->URL, this->protocol);
+    webSocket.begin(
+        this->wsAddress.serverAddr,
+        this->wsAddress.port,
+        this->wsAddress.URL,
+        this->wsAddress.protocol);
 
     webSocket.onEvent([this](WStype_t type, uint8_t *payload, size_t length)
                       {    
@@ -41,7 +37,7 @@ void WebsocketConnection::open()
             break;
         case WStype_TEXT:
             USE_SERIAL.printf("[WSc] get text: %s\n", payload);
-            this->onMessage(payload);
+            eventHandlersPtr->handleIncomingMessage(payload);
             // send message to server
             // webSocket.sendTXT("message here");
             break;
@@ -74,9 +70,22 @@ void WebsocketConnection::open()
         delay(500);
     }
 }
-void WebsocketConnection::loop()
+
+void MyArduinoWebsocketsAdapter::close()
 {
-    NETWORK()->loop();
+    this->webSocket.disconnect();
+}
+
+void MyArduinoWebsocketsAdapter::sendMessage(MESSAGE *message, std::function<void(StaticJsonDocument<200>)> onResponse)
+{
+    this->eventHandlersPtr->handleOutgoingMessage(message, onResponse);
+    String payloadTemp = (*message);
+    this->webSocket.sendTXT(payloadTemp);
+}
+
+void MyArduinoWebsocketsAdapter::loop()
+{
+    OCPP_NETWORK()->loop();
     webSocket.loop();
     if (!this->webSocket.isConnected())
     {
@@ -86,7 +95,7 @@ void WebsocketConnection::loop()
     }
 }
 
-void WebsocketConnection::hexdump(const void *mem, uint32_t len, uint8_t cols)
+void MyArduinoWebsocketsAdapter::hexdump(const void *mem, uint32_t len, uint8_t cols)
 {
     const uint8_t *src = (const uint8_t *)mem;
     USE_SERIAL.printf("\n[HEXDUMP] Address: 0x%08X len: 0x%X (%d)", (ptrdiff_t)src, len, len);

@@ -7,26 +7,26 @@
 #include <WiFi.h>
 #include <WiFiClientSecure.h>
 
-class Network
+class OCPPNetwork
 {
-    static Network *instance;
-    Network();
+    static OCPPNetwork *instance;
+    OCPPNetwork();
 
 public:
-    static Network *getInstance()
+    static OCPPNetwork *getInstance()
     {
-        if (!Network::instance)
+        if (!OCPPNetwork::instance)
         {
-            instance = new Network;
+            instance = new OCPPNetwork;
               MemoryCheck::newnew();
 
         }
         return instance;
     }
 
-    ~Network();
+    ~OCPPNetwork();
     void setup();
     void loop();
 };
 
-Network *NETWORK();
+OCPPNetwork *OCPP_NETWORK();
