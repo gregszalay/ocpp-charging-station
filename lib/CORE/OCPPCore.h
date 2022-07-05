@@ -13,12 +13,12 @@ public:
     ~OCPPCore();
     void setup()
     {
-        this->ocppImplementation->setup();
         this->wsImpl->open();
+        this->ocppImplementation->setup();
     };
     void loop()
     {
-        this->ocppImplementation->loop();
         this->wsImpl->loop();
+        this->ocppImplementation->loop();
     };
 };
