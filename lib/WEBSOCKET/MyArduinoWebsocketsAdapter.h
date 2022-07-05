@@ -21,5 +21,7 @@ public:
     void open() override;
     void loop() override;
     void close() override;
-    void sendMessage(MESSAGE *message, std::function<void(StaticJsonDocument<200>)> onResponse) override;
+    void sendMessage(MESSAGE *message) override;
 };
+
+//std::function<void(StaticJsonDocument<200>)> onResponse

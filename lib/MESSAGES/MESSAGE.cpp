@@ -36,8 +36,8 @@ void MESSAGE::buildFrame()
 
 /******************************* CALL *******************************/
 
-CALL::CALL(String _action)
-    : MESSAGE(MESSAGE_TYPE_ID_ENUM::CALL_TYPE)
+CALL::CALL(String _action, std::function<void(StaticJsonDocument<200>)> _onResponse)
+    : MESSAGE(MESSAGE_TYPE_ID_ENUM::CALL_TYPE), onResponse(_onResponse)
 {
     std::vector<uint8_t> uuid_vector = ESPRandom::uuid4();
     messageId = ESPRandom::uuidToString(uuid_vector);
@@ -46,6 +46,11 @@ CALL::CALL(String _action)
 String CALL::getAction() const
 {
     return this->action;
+};
+
+std::function<void(StaticJsonDocument<200>)> CALL::getCallback() const
+{
+    return this->onResponse;
 };
 
 void CALL::buildFrame()

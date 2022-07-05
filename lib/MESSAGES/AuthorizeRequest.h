@@ -7,6 +7,8 @@ class AuthorizeRequest : public CALL
     void buildPayload() override;
 
 public:
-    AuthorizeRequest(DATATYPES::IdTokenType _idToken);
+    AuthorizeRequest(
+        DATATYPES::IdTokenType _idToken,
+        std::function<void(StaticJsonDocument<200>)> _onResponse);
     ~AuthorizeRequest();
 };

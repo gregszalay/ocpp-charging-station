@@ -12,11 +12,13 @@ OCPPEventHandlers::~OCPPEventHandlers()
 {
 }
 
-void OCPPEventHandlers::handleOutgoingMessage(MESSAGE *message, std::function<void(StaticJsonDocument<200>)> onResponse)
+void OCPPEventHandlers::handleOutgoingMessage(MESSAGE *message)
 {
-    std::map<String, std::function<void(StaticJsonDocument<200>)>> sentMessagesTemp =
-        *(this->sentMessagesRepo->getSentMessages());
-    sentMessagesTemp[message->getMessageId()] = onResponse;
+    if (message->getMessageTypeId() == MESSAGE_TYPE_ID_ENUM::CALL_TYPE)
+    {
+        CALL *callMessage = (CALL *)message;
+        (*this->sentMessagesRepo->getSentMessages())[message->getMessageId()] = (MESSAGE *)callMessage;
+    }
 }
 
 void OCPPEventHandlers::handleIncomingMessage(uint8_t *payload)
@@ -61,15 +63,24 @@ void OCPPEventHandlers::handleCALL()
 void OCPPEventHandlers::handleCALLRESULT()
 {
     String messageId = incomingMessageJSON[1];
-    std::map<String, std::function<MESSAGE *(StaticJsonDocument<200>)>> handlers =
-        *this->reqHandlerRepo->getRequestHandlers();
-    if (handlers[messageId])
+    std::map<String, MESSAGE *> *sentMessagesMapPtr = this->sentMessagesRepo->getSentMessages();
+
+    if ((*sentMessagesMapPtr)[messageId])
     {
-        Serial.printf("Response callback not found for message %s!", messageId.c_str());
-    }
-    else
-    {
-        handlers[messageId](incomingMessageJSON);
+        if ((*sentMessagesMapPtr)[messageId]->getMessageTypeId() == MESSAGE_TYPE_ID_ENUM::CALL_TYPE)
+        {
+            CALL *msgPtr = (CALL *)(*sentMessagesMapPtr)[messageId];
+            // invoke callback
+            msgPtr->getCallback()(incomingMessageJSON);
+        }
+        else
+        {
+            Serial.println("Error: Cannot handle CALLRESULT. Original message has wrong type.");
+        }
+        // remove from sentmessages map
+        sentMessagesMapPtr->erase(sentMessagesMapPtr->find(messageId));
+        // delete unnecessary object
+        delete (*sentMessagesMapPtr)[messageId];
     }
 }
 

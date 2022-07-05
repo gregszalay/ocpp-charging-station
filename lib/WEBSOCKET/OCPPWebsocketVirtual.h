@@ -31,5 +31,5 @@ public:
     virtual void open() = 0;
     virtual void close() = 0;
     virtual void loop(){};
-    virtual void sendMessage(MESSAGE *message, std::function<void(StaticJsonDocument<200>)> onResponse) = 0;
+    virtual void sendMessage(MESSAGE *message) = 0;
 };

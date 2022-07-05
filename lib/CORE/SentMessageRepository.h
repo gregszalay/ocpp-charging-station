@@ -9,10 +9,10 @@ class SentMessageRepository
      * @brief Map of sent message ids to sent json messages.
      *
      */
-    std::map<String, std::function<void(StaticJsonDocument<200>)>> sentMessages;
+    std::map<String, MESSAGE*> sentMessages;
 
 public:
-    std::map<String, std::function<void(StaticJsonDocument<200>)>> *getSentMessages()
+    std::map<String, MESSAGE*> *getSentMessages()
     {
         return &this->sentMessages;
     };

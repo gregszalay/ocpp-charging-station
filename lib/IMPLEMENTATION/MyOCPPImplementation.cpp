@@ -16,36 +16,40 @@ void MyOCPPImplementation::setup()
         ENUMERATIONS::BootReasonEnumType::PowerUp,
         "001",
         "RevolutionCharger",
-        "chargerevolution.net");
-    MemoryCheck::newnew();
-    this->wsImpl->sendMessage(bootNotificationRequest, [](StaticJsonDocument<200> payloadObj)
-                      {
+        "chargerevolution.net",
+        [](StaticJsonDocument<200> payloadObj)
+        {
                  Serial.print("Reason:   ");
                  Serial.println((const char *)payloadObj[3]["reason"]);
                  return new MESSAGE(3); });
 
+    MemoryCheck::newnew();
+    this->wsImpl->sendMessage(bootNotificationRequest);
+
     // AuthorizeReq
     Serial.println("authorize...");
     DATATYPES::IdTokenType idTokenZ("abcd", ENUMERATIONS::IdTokenEnumType::ISO14443);
-    AuthorizeRequest *authorizeRequest = new AuthorizeRequest(idTokenZ);
-    MemoryCheck::newnew();
-    this->wsImpl->sendMessage(authorizeRequest, [](StaticJsonDocument<200> payloadObj)
-                      {
+    AuthorizeRequest *authorizeRequest =
+        new AuthorizeRequest(idTokenZ, [](StaticJsonDocument<200> payloadObj)
+                             {
                  Serial.print("Id token:   ");
                  Serial.println((const char *)payloadObj[3]["idToken"]["idToken"]);
                  Serial.println((const char *)payloadObj[3]["idToken"]["type"]);
                  return new MESSAGE(3); });
+    MemoryCheck::newnew();
+    this->wsImpl->sendMessage(authorizeRequest);
 }
 
 void MyOCPPImplementation::loop()
 {
     if (millis() - lastMessageSentMillis >= 3000)
     {
-        HeartbeatRequest *heartbeatRequest = new HeartbeatRequest;
-        MemoryCheck::newnew();
-        this->wsImpl->sendMessage(heartbeatRequest, [](StaticJsonDocument<200> payloadObj)
-                          { Serial.print("chargerTime:    ");
+        HeartbeatRequest *heartbeatRequest =
+            new HeartbeatRequest([](StaticJsonDocument<200> payloadObj)
+                                 { Serial.print("chargerTime:    ");
                                     Serial.println((long)payloadObj[3]["chargerTime"]); });
+        MemoryCheck::newnew();
+        this->wsImpl->sendMessage(heartbeatRequest);
 
         lastMessageSentMillis = millis();
     }

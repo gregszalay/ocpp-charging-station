@@ -20,6 +20,6 @@ public:
     OCPPEventHandlers(SentMessageRepository *_sentMessagesRepo, VirtualRequestHandlerRepository *_reqHandlerRepo);
     ~OCPPEventHandlers();
     void handleIncomingMessage(uint8_t *payload);
-    void handleOutgoingMessage(MESSAGE *message, std::function<void(StaticJsonDocument<200>)> onResponse);
+    void handleOutgoingMessage(MESSAGE *message);
     void handleError(String errorDescription);
 };

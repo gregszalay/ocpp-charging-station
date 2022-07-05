@@ -4,7 +4,9 @@ BootNotificationRequest::BootNotificationRequest(
     ENUMERATIONS::BootReasonEnumType reason,
     const char *serialNumber,
     const char *model,
-    const char *vendorName) : CALL("BootNotification")
+    const char *vendorName,
+    std::function<void(StaticJsonDocument<200>)> _onResponse
+    ) : CALL("BootNotification", _onResponse)
 {
     this->reason = reason;
     this->serialNumber = String(serialNumber);

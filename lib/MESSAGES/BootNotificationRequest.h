@@ -14,6 +14,7 @@ public:
         ENUMERATIONS::BootReasonEnumType reason,
         const char *serialNumber,
         const char *model,
-        const char *vendorName);
+        const char *vendorName,
+        std::function<void(StaticJsonDocument<200>)> _onResponse);
     ~BootNotificationRequest();
 };

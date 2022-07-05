@@ -76,11 +76,11 @@ void MyArduinoWebsocketsAdapter::close()
     this->webSocket.disconnect();
 }
 
-void MyArduinoWebsocketsAdapter::sendMessage(MESSAGE *message, std::function<void(StaticJsonDocument<200>)> onResponse)
+void MyArduinoWebsocketsAdapter::sendMessage(MESSAGE *message)
 {
-    this->eventHandlersPtr->handleOutgoingMessage(message, onResponse);
     String payloadTemp = (*message);
     this->webSocket.sendTXT(payloadTemp);
+    this->eventHandlersPtr->handleOutgoingMessage(message);
 }
 
 void MyArduinoWebsocketsAdapter::loop()
