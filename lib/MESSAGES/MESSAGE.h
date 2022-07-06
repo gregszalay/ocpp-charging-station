@@ -40,7 +40,7 @@ protected:
 public:
     void buildFrame();
     MESSAGE(uint8_t _messageTypeId, String _messageId = "");
-    /* virtual */ ~MESSAGE() { MemoryCheck::freeOne(); }
+    virtual ~MESSAGE() { MemoryCheck::freeOne(); }
     uint8_t getMessageTypeId() const;
     String getMessageId() const;
     String getMessage();
@@ -62,6 +62,7 @@ private:
 
 public:
     CALL(String _action, std::function<void(StaticJsonDocument<200>)> _onResponse);
+    ~CALL(){}
     void buildFrame();
     String getAction() const;
     std::function<void(StaticJsonDocument<200>)> getCallback() const;
@@ -76,6 +77,7 @@ class CALLRESULT : public MESSAGE
 {
 public:
     CALLRESULT(uint8_t _messageTypeId, String _messageId);
+    ~CALLRESULT(){}
 };
 
 /*******************************************************************************
@@ -93,6 +95,7 @@ protected:
 public:
     void buildFrame();
     CALLERROR(String _messageId, String _errorCode, String _errorDescription);
+    ~CALLERROR(){}
     String getErrorCode() const { return this->errorCode; }
     String getErrorDescription() const { return this->errorDescription; }
 };
