@@ -1,4 +1,5 @@
 #include "OCPPEventHandlers.h"
+#include "DebugCore.h"
 
 OCPPEventHandlers::OCPPEventHandlers(
     SentMessageRepository *_sentMessagesRepo,
@@ -23,20 +24,22 @@ void OCPPEventHandlers::handleOutgoingMessage(MESSAGE *message)
 
 void OCPPEventHandlers::handleIncomingMessage(uint8_t *payload)
 {
-    Serial.println("Received message:");
-    Serial.println((const char *)(payload));
+    DEBUG_CORE("\n<--<-- RECEIVED: \n %s \n\n", (const char *)(payload));
     deserializeJson(this->incomingMessageJSON, payload);
     int messageTypeId = incomingMessageJSON[0];
     switch (messageTypeId)
     {
     case MESSAGE_TYPE_ID_ENUM::CALL_TYPE:
-        //Only commented out for testing
-        //this->handleCALL();
-        //break;
+        DEBUG_LN_CORE("%s", "Handling message as CALL_TYPE");
+        // Only commented out for testing
+        // this->handleCALL();
+        // break;
     case MESSAGE_TYPE_ID_ENUM::CALLRESULT_TYPE:
+        DEBUG_LN_CORE("%s", "Handling message as CALLRESULT_TYPE");
         this->handleCALLRESULT();
         break;
     case MESSAGE_TYPE_ID_ENUM::CALLERROR_TYPE:
+        DEBUG_LN_CORE("%s", "Handling message as CALLERROR_TYPE");
         this->handleCALLERROR();
         break;
     default:
@@ -46,7 +49,7 @@ void OCPPEventHandlers::handleIncomingMessage(uint8_t *payload)
 
 void OCPPEventHandlers::handleError(String errorDescription)
 {
-    Serial.printf("Error: %s \n", errorDescription.c_str());
+    DEBUG_CORE("Error: %s \n", errorDescription.c_str());
 }
 
 void OCPPEventHandlers::handleCALL()
@@ -56,7 +59,7 @@ void OCPPEventHandlers::handleCALL()
         *this->reqHandlerRepo->getRequestHandlers();
     if (handlers[action] == nullptr)
     {
-        Serial.printf("Response not implemented for message %s!", action.c_str());
+        DEBUG_CORE("Response not implemented for message %s!", action.c_str());
         return;
     }
     handlers[action](incomingMessageJSON);
@@ -69,7 +72,7 @@ void OCPPEventHandlers::handleCALLRESULT()
 
     if ((*sentMessagesMapPtr)[messageId])
     {
-        MESSAGE * msgPtr = (*sentMessagesMapPtr)[messageId];
+        MESSAGE *msgPtr = (*sentMessagesMapPtr)[messageId];
         if (msgPtr->getMessageTypeId() == MESSAGE_TYPE_ID_ENUM::CALL_TYPE)
         {
             CALL *callMsgPtr = (CALL *)msgPtr;
@@ -78,7 +81,7 @@ void OCPPEventHandlers::handleCALLRESULT()
         }
         else
         {
-            Serial.println("Error: Cannot handle CALLRESULT. Original message has wrong type.");
+            DEBUG_CORE("%s", "Error: Cannot handle CALLRESULT. Original message has wrong type.");
         }
         // remove from sentmessages map
         sentMessagesMapPtr->erase(sentMessagesMapPtr->find(messageId));
@@ -89,5 +92,5 @@ void OCPPEventHandlers::handleCALLRESULT()
 
 void OCPPEventHandlers::handleCALLERROR()
 {
-    Serial.println("We got an error!");
+    DEBUG_CORE("%s", "We got an error!");
 }

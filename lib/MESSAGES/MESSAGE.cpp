@@ -15,10 +15,10 @@ String MESSAGE::getMessageId() const
     return this->messageId;
 };
 
-String MESSAGE::getMessage()
+String MESSAGE::toJSONString(bool prettyJson)
 {
     buildMessage();
-    serializeJson(jsonDoc, message);
+    prettyJson ? serializeJsonPretty(jsonDoc, message) : serializeJson(jsonDoc, message);
     return message;
 };
 

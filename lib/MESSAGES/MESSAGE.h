@@ -16,6 +16,11 @@
 #include "MemoryCheck.h"
 #include "ENUMERATIONS.h"
 #include "DATATYPES.h"
+#include <string>
+#include <sstream>
+#include <iomanip>
+#include <ios>
+#include <iostream>
 
 enum MESSAGE_TYPE_ID_ENUM
 {
@@ -43,8 +48,14 @@ public:
     virtual ~MESSAGE() { MemoryCheck::freeOne(); }
     uint8_t getMessageTypeId() const;
     String getMessageId() const;
-    String getMessage();
-    operator String() { return getMessage(); }
+    String toJSONString(bool prettyJson = false);
+    inline operator String() { return this->toJSONString(); }
+    virtual inline operator std::string()
+    {
+        std::stringstream stream;
+        stream << (this->toJSONString());
+        return stream.str();
+    }
 };
 
 /*******************************************************************************
@@ -62,7 +73,7 @@ private:
 
 public:
     CALL(String _action, std::function<void(StaticJsonDocument<200>)> _onResponse);
-    ~CALL(){}
+    ~CALL() {}
     void buildFrame();
     String getAction() const;
     std::function<void(StaticJsonDocument<200>)> getCallback() const;
@@ -77,7 +88,7 @@ class CALLRESULT : public MESSAGE
 {
 public:
     CALLRESULT(uint8_t _messageTypeId, String _messageId);
-    ~CALLRESULT(){}
+    ~CALLRESULT() {}
 };
 
 /*******************************************************************************
@@ -95,7 +106,7 @@ protected:
 public:
     void buildFrame();
     CALLERROR(String _messageId, String _errorCode, String _errorDescription);
-    ~CALLERROR(){}
+    ~CALLERROR() {}
     String getErrorCode() const { return this->errorCode; }
     String getErrorDescription() const { return this->errorDescription; }
 };
