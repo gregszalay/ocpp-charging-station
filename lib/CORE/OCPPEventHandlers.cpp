@@ -25,7 +25,6 @@ void OCPPEventHandlers::handleIncomingMessage(uint8_t *payload)
 {
     Serial.println("Received message:");
     Serial.println((const char *)(payload));
-    
     deserializeJson(this->incomingMessageJSON, payload);
     switch (String((const char *)incomingMessageJSON[0]).toInt())
     {
