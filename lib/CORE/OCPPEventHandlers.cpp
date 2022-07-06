@@ -27,13 +27,11 @@ void OCPPEventHandlers::handleIncomingMessage(uint8_t *payload)
     Serial.println((const char *)(payload));
     
     deserializeJson(this->incomingMessageJSON, payload);
-    int messageTypeId = incomingMessageJSON[0];
-    switch (messageTypeId)
+    switch (String((const char *)incomingMessageJSON[0]).toInt())
     {
     case MESSAGE_TYPE_ID_ENUM::CALL_TYPE:
-        //Only commented out while testing!
-        //this->handleCALL();
-        //break;
+        this->handleCALL();
+        break;
     case MESSAGE_TYPE_ID_ENUM::CALLRESULT_TYPE:
         this->handleCALLRESULT();
         break;
@@ -70,12 +68,11 @@ void OCPPEventHandlers::handleCALLRESULT()
 
     if ((*sentMessagesMapPtr)[messageId])
     {
-        MESSAGE *msgPtr = (*sentMessagesMapPtr)[messageId];
-        if (msgPtr->getMessageTypeId() == MESSAGE_TYPE_ID_ENUM::CALL_TYPE)
+        if ((*sentMessagesMapPtr)[messageId]->getMessageTypeId() == MESSAGE_TYPE_ID_ENUM::CALL_TYPE)
         {
-            CALL *callMsgPtr = (CALL *)msgPtr;
+            CALL *msgPtr = (CALL *)(*sentMessagesMapPtr)[messageId];
             // invoke callback
-            callMsgPtr->getCallback()(incomingMessageJSON);
+            msgPtr->getCallback()(incomingMessageJSON);
         }
         else
         {
@@ -84,7 +81,7 @@ void OCPPEventHandlers::handleCALLRESULT()
         // remove from sentmessages map
         sentMessagesMapPtr->erase(sentMessagesMapPtr->find(messageId));
         // delete unnecessary object
-        delete msgPtr;
+        delete (*sentMessagesMapPtr)[messageId];
     }
 }
 
