@@ -1,4 +1,4 @@
-#include "AuthorizeRequest.h"
+#include "C_Authorization.h"
 
 AuthorizeRequest::AuthorizeRequest(
     DATATYPES::IdTokenType _idToken,

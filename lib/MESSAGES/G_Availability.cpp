@@ -1,4 +1,4 @@
-#include "HeartbeatRequest.h"
+#include "G_Availability.h"
 
 HeartbeatRequest::~HeartbeatRequest() {}
 

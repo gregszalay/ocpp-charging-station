@@ -1,7 +1,7 @@
 #include "MyOCPPImplementation.h"
-#include "CancelReservationResponse.h"
-#include "RequestStartTransactionResponse.h"
-#include "RequestStopTransactionResponse.h"
+#include "H_Reservation.h"
+#include "F_RemoteControl.h"
+#include "F_RemoteControl.h"
 
 MyOCPPImplementation::MyOCPPImplementation(
     OCPPWebsocketVirtual *_wsImpl,

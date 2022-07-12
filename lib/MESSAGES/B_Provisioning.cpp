@@ -1,4 +1,4 @@
-#include "BootNotificationRequest.h"
+#include "B_Provisioning.h"
 
 BootNotificationRequest::BootNotificationRequest(
     ENUMERATIONS::BootReasonEnumType reason,
