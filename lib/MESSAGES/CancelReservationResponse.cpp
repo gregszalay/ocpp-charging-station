@@ -14,7 +14,7 @@ CancelReservationResponse::~CancelReservationResponse() {}
 void CancelReservationResponse::buildPayload()
 {
     JsonObject messageCore = jsonDoc.createNestedObject();
-    messageCore["status"] = this->status;
+    messageCore["status"] = ENUMERATIONS::CANCEL_RESERVATION_STATUS_ENUM_TYPE()[this->status];
     JsonObject statusInfo = messageCore.createNestedObject("statusInfo");
     messageCore["reasonCode"] = this->statusInfo.getReasonCode();
     messageCore["additionalInfo"] = this->statusInfo.getAdditionalInfo();

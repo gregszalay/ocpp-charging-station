@@ -38,4 +38,14 @@ namespace ENUMERATIONS
 
     /******************************************************************************/
 
+    std::map<CancelReservationStatusEnumType, String> CANCEL_RESERVATION_MAP;
+    std::map<CancelReservationStatusEnumType, String> &CANCEL_RESERVATION_ENUM_TYPE()
+    {
+        CANCEL_RESERVATION_MAP[CancelReservationStatusEnumType::Accepted] = "Accepted";
+        CANCEL_RESERVATION_MAP[CancelReservationStatusEnumType::Rejected] = "Rejected";
+        return CANCEL_RESERVATION_MAP;
+    }
+
+    /******************************************************************************/
+
 } // ENUMERATIONS
