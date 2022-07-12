@@ -39,11 +39,21 @@ namespace ENUMERATIONS
     /******************************************************************************/
 
     std::map<CancelReservationStatusEnumType, String> CANCEL_RESERVATION_MAP;
-    std::map<CancelReservationStatusEnumType, String> &CANCEL_RESERVATION_ENUM_TYPE()
+    std::map<CancelReservationStatusEnumType, String> &CANCEL_RESERVATION_STATUS_ENUM_TYPE()
     {
-        CANCEL_RESERVATION_MAP[CancelReservationStatusEnumType::Accepted] = "Accepted";
-        CANCEL_RESERVATION_MAP[CancelReservationStatusEnumType::Rejected] = "Rejected";
+        CANCEL_RESERVATION_MAP[CancelReservationStatusEnumType::CancelReservationStatusEnumType__Accepted] = "Accepted";
+        CANCEL_RESERVATION_MAP[CancelReservationStatusEnumType::CancelReservationStatusEnumType__Rejected] = "Rejected";
         return CANCEL_RESERVATION_MAP;
+    }
+
+    /******************************************************************************/
+
+    std::map<RequestStartStopStatusEnumType, String> REQUEST_START_STOP_STATUS_MAP;
+    std::map<RequestStartStopStatusEnumType, String> &REQUEST_START_STOP_STATUS_ENUM_TYPE()
+    {
+        REQUEST_START_STOP_STATUS_MAP[RequestStartStopStatusEnumType::RequestStartStopStatus__Accepted] = "Accepted";
+        REQUEST_START_STOP_STATUS_MAP[RequestStartStopStatusEnumType::RequestStartStopStatus__Rejected] = "Rejected";
+        return REQUEST_START_STOP_STATUS_MAP;
     }
 
     /******************************************************************************/

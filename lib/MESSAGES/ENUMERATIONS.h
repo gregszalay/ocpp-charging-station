@@ -60,11 +60,22 @@ namespace ENUMERATIONS
     enum CancelReservationStatusEnumType
     {
         /** @brief Reservation for the identifier has been canceled. */
-        Accepted,
+        CancelReservationStatusEnumType__Accepted,
         /** @brief Reservation could not be canceled, because there is no reservation active for the identifier. */
-        Rejected,
+        CancelReservationStatusEnumType__Rejected,
     };
     std::map<CancelReservationStatusEnumType, String> &CANCEL_RESERVATION_STATUS_ENUM_TYPE();
+
+    /******************************************************************************/
+
+    enum RequestStartStopStatusEnumType
+    {
+        /** @brief Command will be executed. */
+        RequestStartStopStatus__Accepted,
+        /** @brief Command will not be executed. */
+        RequestStartStopStatus__Rejected,
+    };
+    std::map<RequestStartStopStatusEnumType, String> &REQUEST_START_STOP_STATUS_ENUM_TYPE();
 
     /******************************************************************************/
 
