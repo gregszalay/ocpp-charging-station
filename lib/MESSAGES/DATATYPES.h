@@ -27,4 +27,24 @@ namespace DATATYPES
 
     /******************************************************************************/
 
+    class StatusInfoType
+    {
+        String reasonCode;
+        String additionalInfo;
+
+    public:
+        StatusInfoType(String reasonCode, String additionalInfo = "");
+        ~StatusInfoType();
+        inline String getReasonCode()
+        {
+            return this->reasonCode;
+        }
+        inline String getAdditionalInfo()
+        {
+            return this->additionalInfo;
+        }
+    };
+
+    /******************************************************************************/
+
 } // DATATYPES

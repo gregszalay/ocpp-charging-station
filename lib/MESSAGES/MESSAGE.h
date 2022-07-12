@@ -87,7 +87,7 @@ public:
 class CALLRESULT : public MESSAGE
 {
 public:
-    CALLRESULT(uint8_t _messageTypeId, String _messageId);
+    CALLRESULT(String _messageId);
     ~CALLRESULT() {}
 };
 

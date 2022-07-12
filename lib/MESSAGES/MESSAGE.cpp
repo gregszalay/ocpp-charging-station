@@ -61,7 +61,7 @@ void CALL::buildFrame()
 
 /******************************* CALLRESULT *******************************/
 
-CALLRESULT::CALLRESULT(uint8_t _messageTypeId, String _messageId)
+CALLRESULT::CALLRESULT(String _messageId)
     : MESSAGE(MESSAGE_TYPE_ID_ENUM::CALLRESULT_TYPE, _messageId) {}
 
 /******************************* CALLERROR *******************************/
@@ -69,10 +69,10 @@ CALLRESULT::CALLRESULT(uint8_t _messageTypeId, String _messageId)
 CALLERROR::CALLERROR(
     String _messageId,
     String _errorCode,
-    String _errorDescription) : MESSAGE(MESSAGE_TYPE_ID_ENUM::CALLERROR_TYPE, _messageId)
+    String _errorDescription) : MESSAGE(MESSAGE_TYPE_ID_ENUM::CALLERROR_TYPE, _messageId),
+                                errorCode(_errorCode),
+                                errorDescription(_errorDescription)
 {
-    this->messageId = _messageId;
-    this->errorCode = _errorCode;
 }
 
 void CALLERROR::buildPayload()

@@ -80,7 +80,7 @@ void MyArduinoWebsocketsAdapter::close()
 void MyArduinoWebsocketsAdapter::sendMessage(MESSAGE *message)
 {
     String payloadTemp = (*message);
-    DEBUG_WEBSOCKET("\n\n -->--> SENDING: \n %s \n\n", payloadTemp.c_str());
+    DEBUG_WEBSOCKET("\n -->--> SENDING: \n %s \n\n", payloadTemp.c_str());
     this->webSocket.sendTXT(payloadTemp);
     this->eventHandlersPtr->handleOutgoingMessage(message);
 }

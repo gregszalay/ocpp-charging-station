@@ -1,4 +1,5 @@
 #include "MyOCPPImplementation.h"
+#include "CancelReservationResponse.h"
 
 MyOCPPImplementation::MyOCPPImplementation(
     OCPPWebsocketVirtual *_wsImpl,
@@ -38,6 +39,17 @@ void MyOCPPImplementation::setup()
                  return new MESSAGE(3); });
     MemoryCheck::newnew();
     this->wsImpl->sendMessage(authorizeRequest);
+
+    // CancelReservationResponse
+    Serial.println("CancelReservationResponse...");
+    DATATYPES::StatusInfoType statusInfo("dfvdfv", "jhg");
+    CancelReservationResponse *cancelReserve =
+        new CancelReservationResponse(
+            "6b654278-5836-4989-843f-378e99999999",
+            ENUMERATIONS::CancelReservationStatusEnumType::Accepted,
+            statusInfo);
+    MemoryCheck::newnew();
+    this->wsImpl->sendMessage(cancelReserve);
 }
 
 void MyOCPPImplementation::loop()

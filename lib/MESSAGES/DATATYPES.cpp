@@ -16,4 +16,14 @@ namespace DATATYPES
 
     /******************************************************************************/
 
+    StatusInfoType::StatusInfoType(String _reasonCode, String _additionalInfo)
+        : reasonCode(_reasonCode), additionalInfo(_additionalInfo)
+    {
+    }
+    StatusInfoType::~StatusInfoType()
+    {
+    }
+
+    /******************************************************************************/
+
 } // DATATYPES
