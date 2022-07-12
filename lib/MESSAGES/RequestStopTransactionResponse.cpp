@@ -1,19 +1,19 @@
-#include "RequestStartTransactionResponse.h"
+#include "RequestStopTransactionResponse.h"
 
-RequestStartTransactionResponse::RequestStartTransactionResponse(
+RequestStopTransactionResponse::RequestStopTransactionResponse(
     String _messageId,
-    ENUMERATIONS::RequestStartStopStatusEnumType _status,
     String _transactionId,
+    ENUMERATIONS::RequestStartStopStatusEnumType _status,
     DATATYPES::StatusInfoType _statusInfo) : CALLRESULT(_messageId),
-                                             status(_status),
                                              transactionId(_transactionId),
+                                             status(_status),
                                              statusInfo(_statusInfo)
 {
 }
 
-RequestStartTransactionResponse::~RequestStartTransactionResponse() {}
+RequestStopTransactionResponse::~RequestStopTransactionResponse() {}
 
-void RequestStartTransactionResponse::buildPayload()
+void RequestStopTransactionResponse::buildPayload()
 {
     JsonObject messageCore = jsonDoc.createNestedObject();
     messageCore["transactionId"] = this->transactionId;

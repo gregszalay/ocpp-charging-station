@@ -1,6 +1,7 @@
 #include "MyOCPPImplementation.h"
 #include "CancelReservationResponse.h"
 #include "RequestStartTransactionResponse.h"
+#include "RequestStopTransactionResponse.h"
 
 MyOCPPImplementation::MyOCPPImplementation(
     OCPPWebsocketVirtual *_wsImpl,
@@ -63,6 +64,18 @@ void MyOCPPImplementation::setup()
             statusInfo_2);
     MemoryCheck::newnew();
     this->wsImpl->sendMessage(remoteStartResponse);
+
+    // RequestStopTransactionResponse
+    Serial.println("RequestStopTransactionResponse...");
+    DATATYPES::StatusInfoType statusInfo_3("dfvdfvfvfdv3", "jhdfvdfg");
+    RequestStopTransactionResponse *remoteStopResponse =
+        new RequestStopTransactionResponse(
+            "6b654278-5836-4989-843f-378e99999955",
+            "XYtransactionId2",
+            ENUMERATIONS::RequestStartStopStatusEnumType::RequestStartStopStatus__Accepted,
+            statusInfo_3);
+    MemoryCheck::newnew();
+    this->wsImpl->sendMessage(remoteStopResponse);
 }
 
 void MyOCPPImplementation::loop()
