@@ -26,7 +26,6 @@ void MyOCPPImplementation::setup()
                  Serial.println((const char *)payloadObj[3]["reason"]);
                  return new MESSAGE(3); });
 
-    MemoryCheck::newnew();
     this->wsImpl->sendMessage(bootNotificationRequest);
 
     // AuthorizeReq
@@ -39,7 +38,6 @@ void MyOCPPImplementation::setup()
                  Serial.println((const char *)payloadObj[3]["idToken"]["idToken"]);
                  Serial.println((const char *)payloadObj[3]["idToken"]["type"]);
                  return new MESSAGE(3); });
-    MemoryCheck::newnew();
     this->wsImpl->sendMessage(authorizeRequest);
 
     // CancelReservationResponse
@@ -50,7 +48,6 @@ void MyOCPPImplementation::setup()
             "6b654278-5836-4989-843f-378e99999999",
             ENUMERATIONS::CancelReservationStatusEnumType::CancelReservationStatusEnumType__Accepted,
             statusInfo_1);
-    MemoryCheck::newnew();
     this->wsImpl->sendMessage(cancelReserve);
 
     // RequestStartTransactionResponse
@@ -62,7 +59,6 @@ void MyOCPPImplementation::setup()
             ENUMERATIONS::RequestStartStopStatusEnumType::RequestStartStopStatus__Accepted,
             "XYtransactionId",
             statusInfo_2);
-    MemoryCheck::newnew();
     this->wsImpl->sendMessage(remoteStartResponse);
 
     // RequestStopTransactionResponse
@@ -74,7 +70,6 @@ void MyOCPPImplementation::setup()
             "XYtransactionId2",
             ENUMERATIONS::RequestStartStopStatusEnumType::RequestStartStopStatus__Accepted,
             statusInfo_3);
-    MemoryCheck::newnew();
     this->wsImpl->sendMessage(remoteStopResponse);
 }
 
@@ -86,7 +81,6 @@ void MyOCPPImplementation::loop()
             new HeartbeatRequest([](StaticJsonDocument<200> payloadObj)
                                  { Serial.print("chargerTime:    ");
                                     Serial.println((long)payloadObj[3]["chargerTime"]); });
-        MemoryCheck::newnew();
         this->wsImpl->sendMessage(heartbeatRequest);
 
         lastMessageSentMillis = millis();

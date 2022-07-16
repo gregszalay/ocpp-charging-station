@@ -1,7 +1,6 @@
 //#pragma once
 
 #include "Arduino.h"
-#include "MemoryCheck.h"
 /* #include "FS.h"
 #include <LITTLEFS.h> */
 #include <WiFi.h>
@@ -18,7 +17,6 @@ public:
         if (!OCPPNetwork::instance)
         {
             instance = new OCPPNetwork;
-              MemoryCheck::newnew();
 
         }
         return instance;

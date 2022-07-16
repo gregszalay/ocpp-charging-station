@@ -13,7 +13,6 @@
 #include <ArduinoJson.h>
 #include <ESPRandom.h>
 #include <map>
-#include "MemoryCheck.h"
 #include "ENUMERATIONS.h"
 #include "DATATYPES.h"
 #include <string>
@@ -45,7 +44,7 @@ protected:
 public:
     void buildFrame();
     MESSAGE(uint8_t _messageTypeId, String _messageId = "");
-    virtual ~MESSAGE() { MemoryCheck::freeOne(); }
+    virtual ~MESSAGE() {}
     uint8_t getMessageTypeId() const;
     String getMessageId() const;
     String toJSONString(bool prettyJson = false);

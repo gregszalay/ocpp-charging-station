@@ -4,9 +4,7 @@
 #include <string.h>
 #include "Debug.h"
 
-#define CORE_DEBUG true
-
-#if CORE_DEBUG
+#ifdef CORE_DEBUG
 #define DEBUG_LN_CORE(FORMAT, ...)    \
     {                                 \
         DEBUG_LN(FORMAT, __VA_ARGS__) \

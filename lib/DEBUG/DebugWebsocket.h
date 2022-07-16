@@ -3,9 +3,7 @@
 #include <string.h>
 #include "Debug.h"
 
-#define WEBSOCKET_DEBUG true
-
-#if WEBSOCKET_DEBUG
+#ifdef WEBSOCKET_DEBUG
 #define DEBUG_LN_WEBSOCKET(FORMAT, ...) \
     {                                   \
         DEBUG_LN(FORMAT, __VA_ARGS__)   \

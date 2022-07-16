@@ -42,5 +42,4 @@ OCPPNetwork::OCPPNetwork()
 
 OCPPNetwork::~OCPPNetwork()
 {
-    MemoryCheck::freeOne();
 }
