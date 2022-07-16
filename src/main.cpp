@@ -7,6 +7,7 @@
 #include "MyRequestHandlerRepository.h"
 #include "SentMessageRepository.h"
 //#include "core/OCPP.h"
+#include "HeapDebug.h"
 
 MyRequestHandlerRepository *reqHandlerRepoPtr = new MyRequestHandlerRepository;
 SentMessageRepository *sentMessageRepoPtr = new SentMessageRepository;
@@ -20,9 +21,6 @@ MyArduinoWebsocketsAdapter *myWsAdapterPtr = new MyArduinoWebsocketsAdapter(wsAd
 MyOCPPImplementation *myOCPPImplementationPtr = new MyOCPPImplementation(myWsAdapterPtr, sentMessageRepoPtr, reqHandlerRepoPtr);
 
 OCPPCore OCPP(myOCPPImplementationPtr, myWsAdapterPtr);
-
-
-#include "HeapDebug.h"
 
 
 void setup()
