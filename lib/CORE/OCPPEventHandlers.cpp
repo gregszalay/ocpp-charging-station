@@ -32,7 +32,7 @@ void OCPPEventHandlers::handleIncomingMessage(uint8_t *payload)
     case MESSAGE_TYPE_ID_ENUM::CALL_TYPE:
         DEBUG_LN_CORE("%s", "Handling message as CALL_TYPE");
         // Only commented out for testing
-        // this->handleCALL();
+        this->handleCALL();
         // break;
     case MESSAGE_TYPE_ID_ENUM::CALLRESULT_TYPE:
         DEBUG_LN_CORE("%s", "Handling message as CALLRESULT_TYPE");

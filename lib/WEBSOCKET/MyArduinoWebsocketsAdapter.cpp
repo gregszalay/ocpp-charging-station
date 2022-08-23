@@ -38,6 +38,11 @@ void MyArduinoWebsocketsAdapter::open()
             break;
         case WStype_TEXT:
             //USE_DEBUG_WEBSOCKETf("[WSc] get text: %s\n", payload);
+            DEBUG_WEBSOCKET("%s", "[WSc] DiscWStype_TEXT!\n");
+            DEBUG_WEBSOCKET("[WSc] Payload ptr: %p\n", payload);
+            if(payload == nullptr){
+                break;
+            }
             eventHandlersPtr->handleIncomingMessage(payload);
             // send message to server
             // webSocket.sendTXT("message here");

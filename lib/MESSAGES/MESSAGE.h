@@ -42,7 +42,7 @@ protected:
     void buildMessage();
 
 public:
-    void buildFrame();
+    virtual void buildFrame();
     MESSAGE(uint8_t _messageTypeId, String _messageId = "");
     virtual ~MESSAGE() {}
     uint8_t getMessageTypeId() const;
@@ -103,7 +103,7 @@ protected:
     void buildPayload() override;
 
 public:
-    void buildFrame();
+    void buildFrame() override;
     CALLERROR(String _messageId, String _errorCode, String _errorDescription);
     ~CALLERROR() {}
     String getErrorCode() const { return this->errorCode; }

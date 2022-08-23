@@ -37,7 +37,7 @@ void MESSAGE::buildFrame()
 /******************************* CALL *******************************/
 
 CALL::CALL(String _action, std::function<void(StaticJsonDocument<200>)> _onResponse)
-    : MESSAGE(MESSAGE_TYPE_ID_ENUM::CALL_TYPE), onResponse(_onResponse)
+    : MESSAGE(MESSAGE_TYPE_ID_ENUM::CALL_TYPE), action(_action), onResponse(_onResponse)
 {
     std::vector<uint8_t> uuid_vector = ESPRandom::uuid4();
     messageId = ESPRandom::uuidToString(uuid_vector);
@@ -56,7 +56,9 @@ std::function<void(StaticJsonDocument<200>)> CALL::getCallback() const
 void CALL::buildFrame()
 {
     MESSAGE::buildFrame();
-    jsonDoc.add(action);
+    Serial.println("jsonDoc.add(this->action); CALLED");
+    Serial.println(this->action);
+    jsonDoc.add(this->action);
 }
 
 /******************************* CALLRESULT *******************************/

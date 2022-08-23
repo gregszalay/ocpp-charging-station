@@ -29,6 +29,20 @@ class MyRequestHandlerRepository : public VirtualRequestHandlerRepository
                  return new MESSAGE(3);
              }},
             /******************************************************************/
+            {"RequestStartTransaction",
+             [](StaticJsonDocument<200> payloadObj)
+             {
+                 Serial.print("Received RequestStartTransaction Request");
+                 return new MESSAGE(3);
+             }},
+            /******************************************************************/
+            {"RequestStopTransaction",
+             [](StaticJsonDocument<200> payloadObj)
+             {
+               Serial.print("Received RequestStopTransaction Request");
+                 return new MESSAGE(3);
+             }},
+            /******************************************************************/
         };
 
 public:

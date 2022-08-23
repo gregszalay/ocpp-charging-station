@@ -12,7 +12,8 @@
 MyRequestHandlerRepository *reqHandlerRepoPtr = new MyRequestHandlerRepository;
 SentMessageRepository *sentMessageRepoPtr = new SentMessageRepository;
 
-WebsocketServerAddress wsAddress("gergelyszalay.hu", 3000, "/echo", "ocpp2.0.1");
+//"gergelyszalay.hu"
+WebsocketServerAddress wsAddress("192.168.1.74", 3000, "/fromdevice", "ocpp2.0.1");
 
 OCPPEventHandlers *eventHandlersPtr = new OCPPEventHandlers(sentMessageRepoPtr, reqHandlerRepoPtr);
 
