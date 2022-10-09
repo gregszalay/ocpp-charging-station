@@ -12,7 +12,7 @@
 MyRequestHandlerRepository *reqHandlerRepoPtr = new MyRequestHandlerRepository;
 SentMessageRepository *sentMessageRepoPtr = new SentMessageRepository;
 
-//"gergelyszalay.hu"
+//I have a local websocket server for testing
 WebsocketServerAddress wsAddress("192.168.1.74", 3000, "/fromdevice", "ocpp2.0.1");
 
 OCPPEventHandlers *eventHandlersPtr = new OCPPEventHandlers(sentMessageRepoPtr, reqHandlerRepoPtr);
