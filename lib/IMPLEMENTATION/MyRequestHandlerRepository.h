@@ -29,6 +29,13 @@ class MyRequestHandlerRepository : public VirtualRequestHandlerRepository
                  return new MESSAGE(3);
              }},
             /******************************************************************/
+            {"Hearbeat",
+             [](StaticJsonDocument<200> payloadObj)
+             {
+                 Serial.print("Heartbeat handler:   ");
+                 return new MESSAGE(3);
+             }},
+            /******************************************************************/
             {"RequestStartTransaction",
              [](StaticJsonDocument<200> payloadObj)
              {

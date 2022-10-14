@@ -24,22 +24,22 @@ void OCPPEventHandlers::handleOutgoingMessage(MESSAGE *message)
 
 void OCPPEventHandlers::handleIncomingMessage(uint8_t *payload)
 {
-    DEBUG_CORE("\n<--<-- RECEIVED: \n %s \n\n", (const char *)(payload));
+    DEBUG_CORE("\n <--<-- RECEIVED: %s\n", (const char *)(payload));
     deserializeJson(this->incomingMessageJSON, payload);
     int messageTypeId = incomingMessageJSON[0];
     switch (messageTypeId)
     {
     case MESSAGE_TYPE_ID_ENUM::CALL_TYPE:
-        DEBUG_LN_CORE("%s", "Handling message as CALL_TYPE");
+        DEBUG_LN_CORE("%s", "Type of received message: CALL");
         // Only commented out for testing
         this->handleCALL();
         // break;
     case MESSAGE_TYPE_ID_ENUM::CALLRESULT_TYPE:
-        DEBUG_LN_CORE("%s", "Handling message as CALLRESULT_TYPE");
+        DEBUG_LN_CORE("%s", "Type of received message: CALLRESULT");
         this->handleCALLRESULT();
         break;
     case MESSAGE_TYPE_ID_ENUM::CALLERROR_TYPE:
-        DEBUG_LN_CORE("%s", "Handling message as CALLERROR_TYPE");
+        DEBUG_LN_CORE("%s", "Type of received message: CALLERROR");
         this->handleCALLERROR();
         break;
     default:

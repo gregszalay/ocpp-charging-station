@@ -20,5 +20,7 @@ public:
     {
         this->wsImpl->loop();
         this->ocppImplementation->loop();
+        vTaskDelay(5);
+        delay(5);
     };
 };

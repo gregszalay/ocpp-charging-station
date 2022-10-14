@@ -38,8 +38,8 @@ void MyArduinoWebsocketsAdapter::open()
             break;
         case WStype_TEXT:
             //USE_DEBUG_WEBSOCKETf("[WSc] get text: %s\n", payload);
-            DEBUG_WEBSOCKET("%s", "[WSc] DiscWStype_TEXT!\n");
-            DEBUG_WEBSOCKET("[WSc] Payload ptr: %p\n", payload);
+         //   DEBUG_WEBSOCKET("%s", "[WSc] DiscWStype_TEXT!\n");
+         //   DEBUG_WEBSOCKET("[WSc] Payload ptr: %p\n", payload);
             if(payload == nullptr){
                 break;
             }
@@ -73,8 +73,10 @@ void MyArduinoWebsocketsAdapter::open()
     {
         webSocket.loop();
         DEBUG_WEBSOCKET("%s", ".");
-        delay(500);
+        delay(20);
     }
+    DEBUG_WEBSOCKET("%s", "\n");
+    DEBUG_WEBSOCKET("%s", "\n");
 }
 
 void MyArduinoWebsocketsAdapter::close()
@@ -85,21 +87,23 @@ void MyArduinoWebsocketsAdapter::close()
 void MyArduinoWebsocketsAdapter::sendMessage(MESSAGE *message)
 {
     String payloadTemp = (*message);
-    DEBUG_WEBSOCKET("\n -->--> SENDING: \n %s \n\n", payloadTemp.c_str());
+    DEBUG_WEBSOCKET("\n -->--> SENDING: %s \n", payloadTemp.c_str());
     this->webSocket.sendTXT(payloadTemp);
     this->eventHandlersPtr->handleOutgoingMessage(message);
 }
 
 void MyArduinoWebsocketsAdapter::loop()
 {
-    OCPP_NETWORK()->loop();
     webSocket.loop();
+    OCPP_NETWORK()->loop();
     if (!this->webSocket.isConnected())
     {
         DEBUG_LN_WEBSOCKET("%s", "Websocket connection lost. Rebooting...");
         delay(1000);
         ESP.restart();
     }
+    vTaskDelay(5);
+    delay(5);
 }
 
 void MyArduinoWebsocketsAdapter::hexdump(const void *mem, uint32_t len, uint8_t cols)

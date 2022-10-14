@@ -1,5 +1,5 @@
 #include "OCPPNetwork.h"
-#include <config.h>
+#include "PRIVATE.h"
 
 OCPPNetwork *OCPP_NETWORK()
 {

@@ -14,31 +14,28 @@ MyOCPPImplementation::MyOCPPImplementation(
 void MyOCPPImplementation::setup()
 {
     // Bootnotification
-    Serial.println("bootNotification...");
+    Serial.println("Creating BootNotificationRequest...");
     BootNotificationRequest *bootNotificationRequest = new BootNotificationRequest(
         ENUMERATIONS::BootReasonEnumType::PowerUp,
         "001",
-        "RevolutionCharger",
-        "chargerevolution.net",
+        "Home Charging Station",
+        "Gergely Szalay",
         [](StaticJsonDocument<200> payloadObj)
         {
-                 Serial.print("Reason:   ");
-                 Serial.println((const char *)payloadObj[3]["reason"]);
-                 return new MESSAGE(3); });
+            Serial.println("Received BootNotificationResponse");
+        });
 
     this->wsImpl->sendMessage(bootNotificationRequest);
+    delay(3000);
 
     // AuthorizeReq
-    Serial.println("authorize...");
+    Serial.println("Creating AuthorizeRequest...");
     DATATYPES::IdTokenType idTokenZ("1234", ENUMERATIONS::IdTokenEnumType::ISO14443);
     AuthorizeRequest *authorizeRequest =
         new AuthorizeRequest(idTokenZ, [](StaticJsonDocument<200> payloadObj)
-                             {
-                 Serial.print("Id token:   ");
-                 Serial.println((const char *)payloadObj[3]["idToken"]["idToken"]);
-                 Serial.println((const char *)payloadObj[3]["idToken"]["type"]);
-                 return new MESSAGE(3); });
+                             { Serial.println("Received AuthorizeResponse"); });
     this->wsImpl->sendMessage(authorizeRequest);
+    delay(3000);
 
     // // CancelReservationResponse
     // Serial.println("CancelReservationResponse...");
@@ -75,12 +72,11 @@ void MyOCPPImplementation::setup()
 
 void MyOCPPImplementation::loop()
 {
-    if (millis() - lastMessageSentMillis >= 3000)
+    if (millis() - lastMessageSentMillis >= 10000)
     {
         HeartbeatRequest *heartbeatRequest =
             new HeartbeatRequest([](StaticJsonDocument<200> payloadObj)
-                                 { Serial.print("chargerTime:    ");
-                                    Serial.println((long)payloadObj[3]["chargerTime"]); });
+                                 { Serial.println("Received HeartbeatResponse"); });
         this->wsImpl->sendMessage(heartbeatRequest);
 
         lastMessageSentMillis = millis();

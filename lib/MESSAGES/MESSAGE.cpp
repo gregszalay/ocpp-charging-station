@@ -56,8 +56,6 @@ std::function<void(StaticJsonDocument<200>)> CALL::getCallback() const
 void CALL::buildFrame()
 {
     MESSAGE::buildFrame();
-    Serial.println("jsonDoc.add(this->action); CALLED");
-    Serial.println(this->action);
     jsonDoc.add(this->action);
 }
 
